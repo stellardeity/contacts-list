@@ -1,7 +1,7 @@
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 import { ModalAction, UserData } from "../types";
-import CreateUser from "./Modal/CreateUser";
+import CreateUser from "./ModalUser";
 
 type Props = {
   data: UserData[];
@@ -32,7 +32,7 @@ const UsersList: React.FC<Props> = ({ data, updateData }) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            borderBottom: data.length - 1 === i ? "none" : "2px solid #222",
+            borderBottom: data.length - 1 === i ? "none" : "1px solid #e2e2e2",
           }}
           key={phone}
         >
@@ -41,16 +41,18 @@ const UsersList: React.FC<Props> = ({ data, updateData }) => {
             <p>{phone}</p>
           </div>
           <div>
+            <Button onClick={() => handleEditData({ name, phone })}>
+              Edit
+            </Button>
             <Button
+              danger
+              style={{ marginLeft: 10 }}
               onClick={() => {
                 const res = data.filter((e: UserData) => e.name !== name);
                 updateData(res);
               }}
             >
               Delete
-            </Button>
-            <Button onClick={() => handleEditData({ name, phone })}>
-              Edit
             </Button>
           </div>
         </div>

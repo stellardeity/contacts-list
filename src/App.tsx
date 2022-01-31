@@ -1,6 +1,6 @@
 import { Button, Input } from "antd";
 import { useState } from "react";
-import CreateUser from "./components/Modal/CreateUser";
+import CreateUser from "./components/ModalUser";
 import UsersList from "./components/UsersList";
 import { ModalAction, UserData } from "./types";
 
@@ -31,12 +31,14 @@ const App = () => {
       }}
     >
       <Input
-        style={{ marginBottom: "20px" }}
+        style={{ marginBottom: "15px" }}
         onChange={handleSearch}
         placeholder="Поиск"
       />
 
-      <Button onClick={() => setOpen(!open)}>Create Modal</Button>
+      <Button style={{ marginBottom: "30px" }} onClick={() => setOpen(!open)}>
+        Create Modal
+      </Button>
       <UsersList
         data={search || data}
         updateData={setData}

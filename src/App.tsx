@@ -1,5 +1,4 @@
-import { Button, Cascader, Input, Select } from "antd";
-import Search from "antd/lib/input/Search";
+import { Button, Input } from "antd";
 import { useState } from "react";
 import CreateUser from "./components/Modal/CreateUser";
 import UsersList from "./components/UsersList";
@@ -7,19 +6,20 @@ import { ModalAction, UserData } from "./types";
 
 const App = () => {
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState<any>(null);
+  const [search, setSearch] = useState<UserData[] | null>(null);
   const [data, setData] = useState<UserData[]>(
     localStorage.getItem("userData")
       ? JSON.parse(localStorage.getItem("userData") || "")
       : []
   );
 
-  const onSearch = ({ target: { value } }: any) => {
-    setSearch(data.filter((e) => e.phone.match(value) || e.name.match(value)));
-
-    if (!value) {
-      setSearch("");
-    }
+  const handleSearch = ({
+    target: { value },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    const pattern = new RegExp(value, "gi");
+    setSearch(
+      data.filter((e) => e.phone.match(pattern) || e.name.match(pattern))
+    );
   };
 
   return (
@@ -32,7 +32,7 @@ const App = () => {
     >
       <Input
         style={{ marginBottom: "20px" }}
-        onChange={onSearch}
+        onChange={handleSearch}
         placeholder="Поиск"
       />
 

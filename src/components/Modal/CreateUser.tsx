@@ -1,13 +1,12 @@
 import { Form, Input, Button } from "antd";
-import { useEffect } from "react";
 import { ModalAction, UserData } from "../../types";
 
 type Props = {
   data: UserData[];
-  updateData: (d: any) => any;
+  updateData: (val: UserData[]) => void;
   action: ModalAction;
-  info?: UserData;
-  updateOpen: (a: any) => void;
+  info?: UserData | null;
+  updateOpen: (val: boolean) => void;
 };
 
 const CreateUser: React.FC<Props> = ({
@@ -22,14 +21,12 @@ const CreateUser: React.FC<Props> = ({
       const check = data.filter(
         (e) => e.name === values.name || e.phone === values.phone
       );
-
       if (!check.length) {
-        updateData((prev: any) => [...prev, values]);
+        const res = [...data, values];
+        updateData(res);
       }
-
-      updateOpen(false);
     } else {
-      const r: any = data.map((e: any) => {
+      const changedUserData: UserData[] = data.map((e: UserData) => {
         if (e.phone === info?.phone) {
           e.name = values.name;
           e.phone = values.phone;
@@ -38,14 +35,10 @@ const CreateUser: React.FC<Props> = ({
         return e;
       });
 
-      updateData(r);
-      updateOpen(false);
+      updateData(changedUserData);
     }
+    updateOpen(false);
   };
-
-  useEffect(() => {
-    localStorage.setItem("userData", JSON.stringify(data));
-  }, [data]);
 
   return (
     <div

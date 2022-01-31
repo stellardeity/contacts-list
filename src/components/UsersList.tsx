@@ -1,40 +1,58 @@
 import { Button } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ModalAction, UserData } from "../types";
 import CreateUser from "./Modal/CreateUser";
 
 type Props = {
   data: UserData[];
-  updateData: (d: any) => any;
-  updateOpen: (a: any) => void;
+  updateData: (val: UserData[]) => void;
+  updateOpen: (val: boolean) => void;
 };
 
 const UsersList: React.FC<Props> = ({ data, updateData }) => {
   const [open, setOpen] = useState(false);
-  const [info, setPhone] = useState<any>({});
+  const [info, setInfo] = useState<UserData | null>(null);
 
-  const handleEditData = ({ name, phone }: any) => {
+  const handleEditData = ({ name, phone }: UserData) => {
     setOpen(true);
-    setPhone({ name, phone });
+    setInfo({ name, phone });
   };
+
+  useEffect(() => {
+    localStorage.setItem("userData", JSON.stringify(data));
+  }, [data]);
 
   return (
     <div>
       <h2>Общее количество контактов {data.length}</h2>
-      {data.map(({ name, phone }) => (
-        <div style={{ marginTop: 20 }} key={phone}>
-          <h3>{name}</h3>
-          <p>{phone}</p>
-          <Button
-            onClick={() =>
-              updateData((prev: any) =>
-                prev.filter((d: any) => d.name !== name)
-              )
-            }
-          >
-            Delete
-          </Button>
-          <Button onClick={() => handleEditData({ name, phone })}>Edit</Button>
+      {data.map(({ name, phone }, i) => (
+        <div
+          style={{
+            marginTop: 20,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            borderBottom: data.length - 1 === i ? "none" : "2px solid #222",
+          }}
+          key={phone}
+        >
+          <div>
+            <h3>{name}</h3>
+            <p>{phone}</p>
+          </div>
+          <div>
+            <Button
+              onClick={() => {
+                const res = data.filter((e: UserData) => e.name !== name);
+                updateData(res);
+              }}
+            >
+              Delete
+            </Button>
+            <Button onClick={() => handleEditData({ name, phone })}>
+              Edit
+            </Button>
+          </div>
         </div>
       ))}
 

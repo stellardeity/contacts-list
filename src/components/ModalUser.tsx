@@ -19,12 +19,14 @@ const ModalUser: React.FC<Props> = ({
   createContacts,
   contacts,
 }) => {
-  const [newData, setNewData] = useState<UserData | null>(info || null);
+  const [newData, setNewData] = useState<UserData>(
+    info || { name: "", phone: "" }
+  );
 
   const handleChange = ({
     target: { value, name },
   }: React.ChangeEvent<HTMLInputElement>) => {
-    setNewData((prev: any) => {
+    setNewData((prev: UserData) => {
       if (name === "phone") {
         value = value.replace(/^[0-9]/, "+7").replace(/[^\d\+]/g, "");
       }

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Button } from "antd";
 import { ModalAction, UserData } from "../types";
-import ModalUser from "./ModalUser";
+import ModalUser from "./Modal";
 
 type Props = {
   search: UserData[] | null;

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button, Input } from "antd";
 import { ModalAction, UserData } from "../types";
-import ModalUser from "./ModalUser";
-import UsersList from "./UsersList";
+import ModalUser from "./Modal";
+import UsersList from "./Contacts";
 
 type Props = {
   contacts: UserData[];

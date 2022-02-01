@@ -3,19 +3,21 @@ import { useState } from "react";
 import { ModalAction, UserData } from "../types";
 
 type Props = {
-  data: UserData[];
-  updateData: (val: UserData[]) => void;
+  updateContacts: (val: UserData & { key: string }) => void;
+  createContacts: (val: UserData) => void;
   action: ModalAction;
+  contacts: UserData[];
   info?: UserData | null;
   updateOpen: (val: boolean) => void;
 };
 
-const CreateUser: React.FC<Props> = ({
-  data,
-  updateData,
+const ModalUser: React.FC<Props> = ({
   action,
   info,
   updateOpen,
+  updateContacts,
+  createContacts,
+  contacts,
 }) => {
   const [newData, setNewData] = useState<UserData | null>(info || null);
 
@@ -34,25 +36,24 @@ const CreateUser: React.FC<Props> = ({
   };
 
   const handleSubmit = () => {
-    if (action === ModalAction.Create) {
-      const check = data.filter(
-        (e) => e.name === newData?.name || e.phone === newData?.phone
-      );
-      if (!check.length && newData) {
-        const res = [...data, newData];
-        updateData(res);
-      }
-    } else {
-      const changedUserData: UserData[] = data.map((e: UserData) => {
-        if (e.phone === info?.phone) {
-          e.name = newData?.name || "";
-          e.phone = newData?.phone || "";
-          return e;
-        }
-        return e;
-      });
+    const check = contacts.filter(
+      (e) => e.name === newData?.name || e.phone === newData?.phone
+    );
 
-      updateData(changedUserData);
+    if (newData) {
+      if (!check.length) {
+        if (action === ModalAction.Create) {
+          createContacts({ name: newData.name, phone: newData.phone });
+        }
+      } else {
+        if (info && check.length < 2) {
+          updateContacts({
+            key: info.name,
+            name: newData.name,
+            phone: newData.phone,
+          });
+        }
+      }
     }
     updateOpen(false);
   };
@@ -93,12 +94,14 @@ const CreateUser: React.FC<Props> = ({
 
           <Input
             name="name"
+            required
             style={{ padding: 10, marginBottom: 10, borderRadius: 5 }}
             value={newData?.name || ""}
             placeholder="ФИО"
             onChange={handleChange}
           />
           <Input
+            required
             name="phone"
             value={newData?.phone || ""}
             style={{ padding: 10, borderRadius: 5 }}
@@ -135,4 +138,5 @@ const CreateUser: React.FC<Props> = ({
     </div>
   );
 };
-export default CreateUser;
+
+export default ModalUser;

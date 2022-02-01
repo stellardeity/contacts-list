@@ -1,59 +1,57 @@
-import { Button, Input } from "antd";
-import { useState } from "react";
-import CreateUser from "./components/ModalUser";
-import UsersList from "./components/UsersList";
-import { ModalAction, UserData } from "./types";
+import { useEffect } from "react";
+import { connect } from "react-redux";
+import Home from "./components/Home";
+import {
+  createContacts,
+  deleteContacts,
+  fetchContacts,
+  updateContacts,
+} from "./redux/actions";
+import { UserData } from "./types";
 
-const App = () => {
-  const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState<UserData[] | null>(null);
-  const [data, setData] = useState<UserData[]>(
-    localStorage.getItem("userData")
-      ? JSON.parse(localStorage.getItem("userData") || "")
-      : []
-  );
+type Props = {
+  contacts: UserData[];
+  deleteContacts: (val: UserData["name"]) => void;
+  fetchContacts: (val: UserData[]) => void;
+  createContacts: (val: UserData) => void;
+  updateContacts: (val: UserData & { key: string }) => void;
+};
 
-  const handleSearch = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    const pattern = new RegExp(value, "gi");
-    setSearch(
-      data.filter((e) => e.phone.match(pattern) || e.name.match(pattern))
-    );
-  };
+const App: React.FC<Props> = ({
+  contacts,
+  deleteContacts,
+  fetchContacts,
+  createContacts,
+  updateContacts,
+}) => {
+  useEffect(() => {
+    if (localStorage.getItem("userData")) {
+      fetchContacts(JSON.parse(localStorage.getItem("userData") || ""));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("userData", JSON.stringify(contacts));
+  }, [contacts]);
 
   return (
-    <div
-      style={{
-        minWidth: 800,
-        margin: "20px auto",
-        padding: "10px 170px",
-      }}
-    >
-      <Input
-        style={{ marginBottom: "15px" }}
-        onChange={handleSearch}
-        placeholder="Поиск"
-      />
-
-      <Button style={{ marginBottom: "30px" }} onClick={() => setOpen(!open)}>
-        Create Modal
-      </Button>
-      <UsersList
-        data={search || data}
-        updateData={setData}
-        updateOpen={setOpen}
-      />
-
-      {open && (
-        <CreateUser
-          updateOpen={setOpen}
-          data={data}
-          updateData={setData}
-          action={ModalAction.Create}
-        />
-      )}
-    </div>
+    <Home
+      contacts={contacts}
+      deleteContacts={deleteContacts}
+      createContacts={createContacts}
+      updateContacts={updateContacts}
+    />
   );
 };
-export default App;
+
+const mapStateToProps = (state: UserData[]) => ({ contacts: state });
+
+const mapDispatchToProps = (dispatch: any) => ({
+  updateContacts: (payload: UserData & { key: string }) =>
+    dispatch(updateContacts(payload)),
+  createContacts: (payload: UserData) => dispatch(createContacts(payload)),
+  deleteContacts: (name: UserData["name"]) => dispatch(deleteContacts(name)),
+  fetchContacts: (payload: UserData[]) => dispatch(fetchContacts(payload)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

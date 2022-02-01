@@ -1,11 +1,11 @@
-import { ContactsAction } from "../types";
+import { ContactsDispatch } from "../types";
 import TYPES from "./actionTypes";
 
 const initialState: UserData[] = [];
 
 export function contactsReducer(
   state: UserData[] = initialState,
-  action: ContactsAction
+  action: ContactsDispatch
 ) {
   switch (action.type) {
     case TYPES.DELETE_CONTACT:

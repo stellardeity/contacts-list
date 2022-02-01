@@ -1,18 +1,18 @@
 import { UserData } from "../types";
 import TYPES from "./actionTypes";
 
-export const updateContacts = (payload: UserData & { key: string }) => ({
-  type: TYPES.UPDATE_CONTACTS,
+export const updateContact = (payload: UserData & { key: string }) => ({
+  type: TYPES.UPDATE_CONTACT,
   payload,
 });
 
-export const deleteContacts = (name: UserData["name"]) => ({
-  type: TYPES.DELETE_CONTACTS,
+export const deleteContact = (name: UserData["name"]) => ({
+  type: TYPES.DELETE_CONTACT,
   payload: name,
 });
 
-export const createContacts = (payload: UserData) => ({
-  type: TYPES.CREATE_CONTACTS,
+export const createContact = (payload: UserData) => ({
+  type: TYPES.CREATE_CONTACT,
   payload,
 });
 

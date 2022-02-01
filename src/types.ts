@@ -1,8 +1,8 @@
 import {
-  createContacts,
-  deleteContacts,
+  createContact,
+  deleteContact,
   fetchContacts,
-  updateContacts,
+  updateContact,
 } from "./redux/actions";
 import TYPES from "./redux/actionTypes";
 
@@ -18,17 +18,17 @@ export enum ModalAction {
 
 // Redux
 interface IDeleteContacts {
-  type: typeof TYPES.DELETE_CONTACTS;
+  type: typeof TYPES.DELETE_CONTACT;
   payload: string;
 }
 
 interface IUpdateContacts {
-  type: typeof TYPES.UPDATE_CONTACTS;
+  type: typeof TYPES.UPDATE_CONTACT;
   payload: UserData & { key: string };
 }
 
 interface ICreateContacts {
-  type: typeof TYPES.CREATE_CONTACTS;
+  type: typeof TYPES.CREATE_CONTACT;
   payload: UserData;
 }
 
@@ -44,8 +44,8 @@ export type ContactsAction =
   | IFetchContacts;
 
 export type ContactsDispatch = ReturnType<
-  | typeof createContacts
-  | typeof deleteContacts
+  | typeof createContact
+  | typeof deleteContact
   | typeof fetchContacts
-  | typeof updateContacts
+  | typeof updateContact
 >;

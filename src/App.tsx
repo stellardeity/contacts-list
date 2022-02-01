@@ -2,10 +2,10 @@ import { Dispatch, useEffect } from "react";
 import { connect } from "react-redux";
 import Home from "./components/Home";
 import {
-  createContacts,
-  deleteContacts,
+  createContact,
+  deleteContact,
   fetchContacts,
-  updateContacts,
+  updateContact,
 } from "./redux/actions";
 import { ContactsDispatch, UserData } from "./types";
 
@@ -48,9 +48,9 @@ const mapStateToProps = (state: UserData[]) => ({ contacts: state });
 
 const mapDispatchToProps = (dispatch: Dispatch<ContactsDispatch>) => ({
   updateContacts: (payload: UserData & { key: string }) =>
-    dispatch(updateContacts(payload)),
-  createContacts: (payload: UserData) => dispatch(createContacts(payload)),
-  deleteContacts: (name: UserData["name"]) => dispatch(deleteContacts(name)),
+    dispatch(updateContact(payload)),
+  createContacts: (payload: UserData) => dispatch(createContact(payload)),
+  deleteContacts: (name: UserData["name"]) => dispatch(deleteContact(name)),
   fetchContacts: (payload: UserData[]) => dispatch(fetchContacts(payload)),
 });
 

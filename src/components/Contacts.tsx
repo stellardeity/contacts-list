@@ -1,40 +1,50 @@
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "antd";
-import { useEffect, useState } from "react";
 import { ModalAction, UserData } from "../types";
-import CreateUser from "./ModalUser";
+import ModalUser from "./Modal";
 
 type Props = {
-  data: UserData[];
-  updateData: (val: UserData[]) => void;
+  search: UserData[] | null;
+  contacts: UserData[];
   updateOpen: (val: boolean) => void;
+  deleteContacts: (val: UserData["name"]) => void;
+  updateContacts: (val: UserData & { key: UserData["name"] }) => void;
+  createContacts: (val: UserData) => void;
 };
 
-const UsersList: React.FC<Props> = ({ data, updateData }) => {
+const UsersList: React.FC<Props> = ({
+  search,
+  contacts,
+  deleteContacts,
+  updateContacts,
+  createContacts,
+}) => {
   const [open, setOpen] = useState(false);
   const [info, setInfo] = useState<UserData | null>(null);
+  const list = useMemo(() => search || contacts, [contacts, search]);
 
   const handleEditData = ({ name, phone }: UserData) => {
     setOpen(true);
     setInfo({ name, phone });
   };
 
-  useEffect(() => {
-    localStorage.setItem("userData", JSON.stringify(data));
-  }, [data]);
-
   return (
     <div>
-      <h2>Общее количество контактов {data.length}</h2>
-      {data.map(({ name, phone }, i) => (
+      {search && search.length !== contacts.length ? (
+        <h2>Найдено контактов {search.length}</h2>
+      ) : (
+        <h2>Общее количество контактов {contacts.length}</h2>
+      )}
+      {list.map(({ name, phone }, i) => (
         <div
           style={{
-            marginTop: 20,
+            marginTop: 10,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            borderBottom: data.length - 1 === i ? "none" : "1px solid #e2e2e2",
+            borderBottom: list.length - 1 === i ? "none" : "1px solid #e2e2e2",
           }}
-          key={phone}
+          key={name}
         >
           <div>
             <h3>{name}</h3>
@@ -47,10 +57,7 @@ const UsersList: React.FC<Props> = ({ data, updateData }) => {
             <Button
               danger
               style={{ marginLeft: 10 }}
-              onClick={() => {
-                const res = data.filter((e: UserData) => e.name !== name);
-                updateData(res);
-              }}
+              onClick={() => deleteContacts(name)}
             >
               Delete
             </Button>
@@ -59,15 +66,17 @@ const UsersList: React.FC<Props> = ({ data, updateData }) => {
       ))}
 
       {open && (
-        <CreateUser
+        <ModalUser
+          updateContacts={updateContacts}
+          createContacts={createContacts}
+          contacts={contacts}
           updateOpen={setOpen}
-          data={data}
           info={info}
-          updateData={updateData}
           action={ModalAction.Edit}
         />
       )}
     </div>
   );
 };
+
 export default UsersList;

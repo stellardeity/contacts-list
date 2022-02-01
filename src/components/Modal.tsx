@@ -1,30 +1,36 @@
-import { Form, Input, Button } from "antd";
 import { useState } from "react";
+import { Form, Input, Button } from "antd";
 import { ModalAction, UserData } from "../types";
+import { checkValidation, formatNumber } from "../helpers";
 
 type Props = {
-  data: UserData[];
-  updateData: (val: UserData[]) => void;
+  updateContacts: (val: UserData & { key: UserData["name"] }) => void;
+  createContacts: (val: UserData) => void;
   action: ModalAction;
+  contacts: UserData[];
   info?: UserData | null;
   updateOpen: (val: boolean) => void;
 };
 
-const CreateUser: React.FC<Props> = ({
-  data,
-  updateData,
+const ModalUser: React.FC<Props> = ({
   action,
   info,
   updateOpen,
+  updateContacts,
+  createContacts,
+  contacts,
 }) => {
-  const [newData, setNewData] = useState<UserData | null>(info || null);
+  const [newData, setNewData] = useState<UserData>(
+    info || { name: "", phone: "" }
+  );
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = ({
     target: { value, name },
   }: React.ChangeEvent<HTMLInputElement>) => {
-    setNewData((prev: any) => {
+    setNewData((prev: UserData) => {
       if (name === "phone") {
-        value = value.replace(/^8/, "+7").replace(/[^\d\+]/g, "");
+        value = formatNumber(value);
       }
       return {
         ...prev,
@@ -34,25 +40,19 @@ const CreateUser: React.FC<Props> = ({
   };
 
   const handleSubmit = () => {
-    if (action === ModalAction.Create) {
-      const check = data.filter(
-        (e) => e.name === newData?.name || e.phone === newData?.phone
-      );
-      if (!check.length && newData) {
-        const res = [...data, newData];
-        updateData(res);
-      }
-    } else {
-      const changedUserData: UserData[] = data.map((e: UserData) => {
-        if (e.phone === info?.phone) {
-          e.name = newData?.name || "";
-          e.phone = newData?.phone || "";
-          return e;
-        }
-        return e;
-      });
+    const error = checkValidation({ contacts, setError, newData, action });
+    if (error === 1) return null;
 
-      updateData(changedUserData);
+    if (newData) {
+      if (action === ModalAction.Create) {
+        createContacts({ name: newData.name, phone: newData.phone });
+      } else {
+        updateContacts({
+          key: info?.name || "",
+          name: newData.name,
+          phone: newData.phone,
+        });
+      }
     }
     updateOpen(false);
   };
@@ -93,12 +93,14 @@ const CreateUser: React.FC<Props> = ({
 
           <Input
             name="name"
+            required
             style={{ padding: 10, marginBottom: 10, borderRadius: 5 }}
             value={newData?.name || ""}
             placeholder="ФИО"
             onChange={handleChange}
           />
           <Input
+            required
             name="phone"
             value={newData?.phone || ""}
             style={{ padding: 10, borderRadius: 5 }}
@@ -106,6 +108,8 @@ const CreateUser: React.FC<Props> = ({
             maxLength={12}
             onChange={handleChange}
           />
+
+          {error && <p style={{ color: "red" }}>{error}</p>}
 
           <div
             style={{
@@ -135,4 +139,5 @@ const CreateUser: React.FC<Props> = ({
     </div>
   );
 };
-export default CreateUser;
+
+export default ModalUser;

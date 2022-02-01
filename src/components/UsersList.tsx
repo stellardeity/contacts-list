@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ModalAction, UserData } from "../types";
 import ModalUser from "./ModalUser";
 
@@ -21,7 +21,7 @@ const UsersList: React.FC<Props> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [info, setInfo] = useState<UserData | null>(null);
-  const list = search || contacts;
+  const list = useMemo(() => search || contacts, [contacts, search]);
 
   const handleEditData = ({ name, phone }: UserData) => {
     setOpen(true);

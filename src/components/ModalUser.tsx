@@ -26,7 +26,7 @@ const ModalUser: React.FC<Props> = ({
   }: React.ChangeEvent<HTMLInputElement>) => {
     setNewData((prev: any) => {
       if (name === "phone") {
-        value = value.replace(/^8/, "+7").replace(/[^\d\+]/g, "");
+        value = value.replace(/^[0-9]/, "+7").replace(/[^\d\+]/g, "");
       }
       return {
         ...prev,

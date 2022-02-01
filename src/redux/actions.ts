@@ -2,7 +2,7 @@ import { UserData } from "../types";
 
 export const updateContacts = (payload: UserData & { key: string }) => ({
   type: "contacts/UPDATE_CONTACTS",
-  payload: payload,
+  payload,
 });
 
 export const deleteContacts = (name: UserData["name"]) => ({
@@ -12,10 +12,10 @@ export const deleteContacts = (name: UserData["name"]) => ({
 
 export const createContacts = (payload: UserData) => ({
   type: "contacts/CREATE_CONTACTS",
-  payload: payload,
+  payload,
 });
 
 export const fetchContacts = (payload: UserData[]) => ({
   type: "contacts/FETCH_CONTACTS",
-  payload: payload,
+  payload,
 });

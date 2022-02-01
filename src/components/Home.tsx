@@ -4,55 +4,39 @@ import ModalUser from "./Modal";
 import UsersList from "./Contacts";
 import Search from "./Search";
 import { ModalAction } from "../types";
+import { useSelector } from "react-redux";
+import { selectContacts } from "../redux/selectors";
+import { createContact } from "../redux/actions";
+import styled from "styled-components";
 
-type Props = {
-  contacts: UserData[];
-  deleteContacts: (val: UserData["name"]) => void;
-  createContacts: (val: UserData) => void;
-  updateContacts: (val: UserData & { key: UserData["name"] }) => void;
-};
-
-const Home: React.FC<Props> = ({
-  contacts,
-  deleteContacts,
-  createContacts,
-  updateContacts,
-}) => {
+const Home: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const contacts = useSelector(selectContacts);
   const [search, setSearch] = useState<UserData[] | null>(null);
 
   return (
-    <div
-      style={{
-        minWidth: 800,
-        margin: "20px auto",
-        padding: "10px 170px",
-      }}
-    >
+    <Wrapper>
       <Search updateSearch={setSearch} contacts={contacts} />
       <Button style={{ marginBottom: "30px" }} onClick={() => setOpen(!open)}>
         Create Modal
       </Button>
-      <UsersList
-        createContacts={createContacts}
-        updateContacts={updateContacts}
-        search={search}
-        contacts={contacts}
-        updateOpen={setOpen}
-        deleteContacts={deleteContacts}
-      />
+      <UsersList search={search} contacts={contacts} updateOpen={setOpen} />
 
       {open && (
         <ModalUser
-          createContacts={createContacts}
-          updateContacts={updateContacts}
+          callback={createContact}
           updateOpen={setOpen}
-          contacts={contacts}
           action={ModalAction.Create}
         />
       )}
-    </div>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  min-width: 800;
+  margin: 20px auto;
+  padding: 10px 170px;
+`;
 
 export default Home;

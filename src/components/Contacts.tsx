@@ -2,24 +2,19 @@ import { useMemo, useState } from "react";
 import { Button } from "antd";
 import { ModalAction } from "../types";
 import ModalUser from "./Modal";
+import { useDispatch } from "react-redux";
+import { deleteContact, updateContact } from "../redux/actions";
+import styled from "styled-components";
 
 type Props = {
   search: UserData[] | null;
   contacts: UserData[];
   updateOpen: (val: boolean) => void;
-  deleteContacts: (val: UserData["name"]) => void;
-  updateContacts: (val: UserData & { key: UserData["name"] }) => void;
-  createContacts: (val: UserData) => void;
 };
 
-const UsersList: React.FC<Props> = ({
-  search,
-  contacts,
-  deleteContacts,
-  updateContacts,
-  createContacts,
-}) => {
+const UsersList: React.FC<Props> = ({ search, contacts }) => {
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
   const [info, setInfo] = useState<UserData | null>(null);
   const list = useMemo(() => search || contacts, [contacts, search]);
 
@@ -36,12 +31,8 @@ const UsersList: React.FC<Props> = ({
         <h2>Общее количество контактов {contacts.length}</h2>
       )}
       {list.map(({ name, phone }, i) => (
-        <div
+        <Contact
           style={{
-            marginTop: 10,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
             borderBottom: list.length - 1 === i ? "none" : "1px solid #e2e2e2",
           }}
           key={name}
@@ -57,19 +48,17 @@ const UsersList: React.FC<Props> = ({
             <Button
               danger
               style={{ marginLeft: 10 }}
-              onClick={() => deleteContacts(name)}
+              onClick={() => dispatch(deleteContact(name))}
             >
               Delete
             </Button>
           </div>
-        </div>
+        </Contact>
       ))}
 
       {open && (
         <ModalUser
-          updateContacts={updateContacts}
-          createContacts={createContacts}
-          contacts={contacts}
+          callback={updateContact}
           updateOpen={setOpen}
           info={info}
           action={ModalAction.Edit}
@@ -78,5 +67,12 @@ const UsersList: React.FC<Props> = ({
     </div>
   );
 };
+
+const Contact = styled.div`
+  margin-top: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 export default UsersList;

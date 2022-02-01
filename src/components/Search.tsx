@@ -17,13 +17,11 @@ const Search: React.FC<Props> = ({ contacts, updateSearch }) => {
   };
 
   return (
-    <React.Fragment>
-      <Input
-        style={{ marginBottom: "15px" }}
-        onChange={handleSearch}
-        placeholder="Поиск"
-      />
-    </React.Fragment>
+    <Input
+      style={{ marginBottom: "15px" }}
+      onChange={handleSearch}
+      placeholder="Поиск"
+    />
   );
 };
 

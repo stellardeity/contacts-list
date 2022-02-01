@@ -2,24 +2,20 @@ import { useState } from "react";
 import { Form, Input, Button } from "antd";
 import { ModalAction } from "../types";
 import { checkValidation, formatNumber } from "../helpers";
+import { useDispatch, useSelector } from "react-redux";
+import { selectContacts } from "../redux/selectors";
+import styled from "styled-components";
 
 type Props = {
-  updateContacts: (val: UserData & { key: UserData["name"] }) => void;
-  createContacts: (val: UserData) => void;
   action: ModalAction;
-  contacts: UserData[];
   info?: UserData | null;
   updateOpen: (val: boolean) => void;
+  callback: (val: any) => void;
 };
 
-const ModalUser: React.FC<Props> = ({
-  action,
-  info,
-  updateOpen,
-  updateContacts,
-  createContacts,
-  contacts,
-}) => {
+const ModalUser: React.FC<Props> = ({ action, info, updateOpen, callback }) => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
   const [newData, setNewData] = useState<UserData>(
     info || { name: "", phone: "" }
   );
@@ -41,44 +37,27 @@ const ModalUser: React.FC<Props> = ({
 
   const handleSubmit = () => {
     const error = checkValidation({ contacts, setError, newData, action });
-    if (error === 1) return null;
+    if (error) return null;
 
     if (newData) {
       if (action === ModalAction.Create) {
-        createContacts({ name: newData.name, phone: newData.phone });
+        dispatch(callback({ name: newData.name, phone: newData.phone }));
       } else {
-        updateContacts({
-          key: info?.name || "",
-          name: newData.name,
-          phone: newData.phone,
-        });
+        dispatch(
+          callback({
+            key: info?.name || "",
+            name: newData.name,
+            phone: newData.phone,
+          })
+        );
       }
     }
     updateOpen(false);
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "#2a9fff",
-        position: "absolute",
-        top: 0,
-        left: 0,
-        height: "100%",
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          width: "500px",
-          backgroundColor: "#fff",
-          padding: "180px 80px",
-          borderRadius: "5px",
-        }}
-      >
+    <Modal>
+      <ModalInner>
         <Form
           name="basic"
           initialValues={{ remember: true }}
@@ -91,19 +70,18 @@ const ModalUser: React.FC<Props> = ({
               : `${info?.name}`}
           </h1>
 
-          <Input
+          <InputStyled
             name="name"
             required
-            style={{ padding: 10, marginBottom: 10, borderRadius: 5 }}
+            style={{ marginBottom: 10 }}
             value={newData?.name || ""}
             placeholder="ФИО"
             onChange={handleChange}
           />
-          <Input
+          <InputStyled
             required
             name="phone"
             value={newData?.phone || ""}
-            style={{ padding: 10, borderRadius: 5 }}
             placeholder="Номер телефона"
             maxLength={12}
             onChange={handleChange}
@@ -111,33 +89,53 @@ const ModalUser: React.FC<Props> = ({
 
           {error && <p style={{ color: "red" }}>{error}</p>}
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginTop: 20,
-            }}
-          >
-            <Button
-              style={{ marginLeft: 10, borderRadius: 5 }}
-              size="large"
-              type="primary"
-              htmlType="submit"
-            >
+          <Buttons>
+            <ButtonStyled size="large" type="primary" htmlType="submit">
               Submit
-            </Button>
-            <Button
-              style={{ marginLeft: 10, borderRadius: 5 }}
-              size="large"
-              onClick={() => updateOpen(false)}
-            >
+            </ButtonStyled>
+            <ButtonStyled size="large" onClick={() => updateOpen(false)}>
               Cancel
-            </Button>
-          </div>
+            </ButtonStyled>
+          </Buttons>
         </Form>
-      </div>
-    </div>
+      </ModalInner>
+    </Modal>
   );
 };
+
+const Modal = styled.div`
+  background-color: #2a9fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalInner = styled.div`
+  width: 500px;
+  background-color: #fff;
+  padding: 180px 80px;
+  border-radius: 5px;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+`;
+
+const InputStyled = styled(Input)`
+  padding: 10px;
+  border-radius: 5;
+`;
+
+const ButtonStyled = styled(Button)`
+  margin-left: 10px;
+  border-radius: 5px;
+`;
 
 export default ModalUser;

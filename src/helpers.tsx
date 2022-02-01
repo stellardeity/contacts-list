@@ -16,23 +16,25 @@ export const checkValidation = ({
   action,
   newData,
   setError,
-}: checkValidationType): 1 | undefined => {
+}: checkValidationType): boolean => {
   const check = contacts.filter(
     (e) => e.name === newData?.name || e.phone === newData?.phone
   );
 
   if (newData.phone.length < 12) {
     setError(errorsModalWindow.phoneIncorrect);
-    return 1;
+    return true;
   }
 
   if (check.length && action === ModalAction.Create) {
     setError(errorsModalWindow.userAlreadyExists);
-    return 1;
+    return true;
   }
 
   if (check.length >= 2 && action === ModalAction.Edit) {
     setError(errorsModalWindow.userAlreadyExists);
-    return 1;
+    return true;
   }
+
+  return false;
 };

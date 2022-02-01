@@ -3,6 +3,7 @@ import { Button, Input } from "antd";
 import { ModalAction, UserData } from "../types";
 import ModalUser from "./Modal";
 import UsersList from "./Contacts";
+import Search from "./Search";
 
 type Props = {
   contacts: UserData[];
@@ -20,15 +21,6 @@ const Home: React.FC<Props> = ({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState<UserData[] | null>(null);
 
-  const handleSearch = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    const pattern = new RegExp(value, "gi");
-    setSearch(
-      contacts.filter((e) => e.phone.match(pattern) || e.name.match(pattern))
-    );
-  };
-
   return (
     <div
       style={{
@@ -37,12 +29,7 @@ const Home: React.FC<Props> = ({
         padding: "10px 170px",
       }}
     >
-      <Input
-        style={{ marginBottom: "15px" }}
-        onChange={handleSearch}
-        placeholder="Поиск"
-      />
-
+      <Search updateSearch={setSearch} contacts={contacts} />
       <Button style={{ marginBottom: "30px" }} onClick={() => setOpen(!open)}>
         Create Modal
       </Button>

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Dispatch, useEffect } from "react";
 import { connect } from "react-redux";
 import Home from "./components/Home";
 import {
@@ -7,7 +7,7 @@ import {
   fetchContacts,
   updateContacts,
 } from "./redux/actions";
-import { UserData } from "./types";
+import { ContactsDispatch, UserData } from "./types";
 
 type Props = {
   contacts: UserData[];
@@ -46,7 +46,7 @@ const App: React.FC<Props> = ({
 
 const mapStateToProps = (state: UserData[]) => ({ contacts: state });
 
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: Dispatch<ContactsDispatch>) => ({
   updateContacts: (payload: UserData & { key: string }) =>
     dispatch(updateContacts(payload)),
   createContacts: (payload: UserData) => dispatch(createContacts(payload)),

@@ -1,3 +1,9 @@
+import {
+  createContacts,
+  deleteContacts,
+  fetchContacts,
+  updateContacts,
+} from "./redux/actions";
 import TYPES from "./redux/actionTypes";
 
 export type UserData = {
@@ -36,3 +42,10 @@ export type ContactsAction =
   | IUpdateContacts
   | ICreateContacts
   | IFetchContacts;
+
+export type ContactsDispatch = ReturnType<
+  | typeof createContacts
+  | typeof deleteContacts
+  | typeof fetchContacts
+  | typeof updateContacts
+>;

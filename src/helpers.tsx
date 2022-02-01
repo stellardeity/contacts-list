@@ -1,8 +1,8 @@
 import { errorsModalWindow } from "./constants";
-import { ModalAction, UserData } from "./types";
+import { ModalAction } from "./types";
 
 export const formatNumber = (num: string): string =>
-  num.replace(/^[0-9]/, "+7").replace(/[^\d\+]/g, "");
+  num.replace(/^[0-9]/, "+7").replace(/[^\d\\+]/g, "");
 
 type checkValidationType = {
   contacts: UserData[];

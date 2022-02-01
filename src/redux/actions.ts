@@ -1,4 +1,3 @@
-import { UserData } from "../types";
 import TYPES from "./actionTypes";
 
 export const updateContact = (

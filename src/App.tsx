@@ -1,4 +1,5 @@
-import { Dispatch, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { Dispatch, useEffect } from "react";
 import { connect } from "react-redux";
 import Home from "./components/Home";
 import {
@@ -7,7 +8,7 @@ import {
   fetchContacts,
   updateContact,
 } from "./redux/actions";
-import { ContactsDispatch, UserData } from "./types";
+import { ContactsDispatch } from "./types";
 
 type Props = {
   contacts: UserData[];

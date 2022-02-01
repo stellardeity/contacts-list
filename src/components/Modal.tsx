@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Form, Input, Button } from "antd";
-import { ModalAction, UserData } from "../types";
+import { ModalAction } from "../types";
 import { checkValidation, formatNumber } from "../helpers";
 
 type Props = {

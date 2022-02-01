@@ -1,4 +1,4 @@
-import { ContactsAction, UserData } from "../types";
+import { ContactsAction } from "../types";
 import TYPES from "./actionTypes";
 
 const initialState: UserData[] = [];

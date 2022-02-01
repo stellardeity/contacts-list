@@ -1,5 +1,4 @@
 import { Input } from "antd";
-import { UserData } from "../types";
 import React from "react";
 
 type Props = {

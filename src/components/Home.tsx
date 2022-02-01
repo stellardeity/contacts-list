@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Input } from "antd";
+import { Button } from "antd";
 import { ModalAction, UserData } from "../types";
 import ModalUser from "./Modal";
 import UsersList from "./Contacts";
@@ -9,7 +9,7 @@ type Props = {
   contacts: UserData[];
   deleteContacts: (val: UserData["name"]) => void;
   createContacts: (val: UserData) => void;
-  updateContacts: (val: UserData & { key: string }) => void;
+  updateContacts: (val: UserData & { key: UserData["name"] }) => void;
 };
 
 const Home: React.FC<Props> = ({

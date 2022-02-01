@@ -8,7 +8,7 @@ type Props = {
   contacts: UserData[];
   updateOpen: (val: boolean) => void;
   deleteContacts: (val: UserData["name"]) => void;
-  updateContacts: (val: UserData & { key: string }) => void;
+  updateContacts: (val: UserData & { key: UserData["name"] }) => void;
   createContacts: (val: UserData) => void;
 };
 

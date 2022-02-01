@@ -1,7 +1,9 @@
 import { UserData } from "../types";
 import TYPES from "./actionTypes";
 
-export const updateContact = (payload: UserData & { key: string }) => ({
+export const updateContact = (
+  payload: UserData & { key: UserData["name"] }
+) => ({
   type: TYPES.UPDATE_CONTACT,
   payload,
 });

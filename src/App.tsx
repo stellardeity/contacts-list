@@ -14,7 +14,7 @@ type Props = {
   deleteContacts: (val: UserData["name"]) => void;
   fetchContacts: (val: UserData[]) => void;
   createContacts: (val: UserData) => void;
-  updateContacts: (val: UserData & { key: string }) => void;
+  updateContacts: (val: UserData & { key: UserData["name"] }) => void;
 };
 
 const App: React.FC<Props> = ({

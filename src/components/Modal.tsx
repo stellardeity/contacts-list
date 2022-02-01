@@ -3,7 +3,7 @@ import { Form, Input, Button } from "antd";
 import { ModalAction, UserData } from "../types";
 
 type Props = {
-  updateContacts: (val: UserData & { key: string }) => void;
+  updateContacts: (val: UserData & { key: UserData["name"] }) => void;
   createContacts: (val: UserData) => void;
   action: ModalAction;
   contacts: UserData[];

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Form, Input, Button } from "antd";
 import { ModalAction, UserData } from "../types";
+import { checkValidation, formatNumber } from "../helpers";
 
 type Props = {
   updateContacts: (val: UserData & { key: UserData["name"] }) => void;
@@ -22,13 +23,14 @@ const ModalUser: React.FC<Props> = ({
   const [newData, setNewData] = useState<UserData>(
     info || { name: "", phone: "" }
   );
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = ({
     target: { value, name },
   }: React.ChangeEvent<HTMLInputElement>) => {
     setNewData((prev: UserData) => {
       if (name === "phone") {
-        value = value.replace(/^[0-9]/, "+7").replace(/[^\d\+]/g, "");
+        value = formatNumber(value);
       }
       return {
         ...prev,
@@ -38,23 +40,18 @@ const ModalUser: React.FC<Props> = ({
   };
 
   const handleSubmit = () => {
-    const check = contacts.filter(
-      (e) => e.name === newData?.name || e.phone === newData?.phone
-    );
+    const error = checkValidation({ contacts, setError, newData, action });
+    if (error === 1) return null;
 
     if (newData) {
-      if (!check.length) {
-        if (action === ModalAction.Create) {
-          createContacts({ name: newData.name, phone: newData.phone });
-        }
+      if (action === ModalAction.Create) {
+        createContacts({ name: newData.name, phone: newData.phone });
       } else {
-        if (info && check.length < 2) {
-          updateContacts({
-            key: info.name,
-            name: newData.name,
-            phone: newData.phone,
-          });
-        }
+        updateContacts({
+          key: info?.name || "",
+          name: newData.name,
+          phone: newData.phone,
+        });
       }
     }
     updateOpen(false);
@@ -111,6 +108,8 @@ const ModalUser: React.FC<Props> = ({
             maxLength={12}
             onChange={handleChange}
           />
+
+          {error && <p style={{ color: "red" }}>{error}</p>}
 
           <div
             style={{

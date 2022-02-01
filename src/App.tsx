@@ -47,7 +47,7 @@ const App: React.FC<Props> = ({
 const mapStateToProps = (state: UserData[]) => ({ contacts: state });
 
 const mapDispatchToProps = (dispatch: Dispatch<ContactsDispatch>) => ({
-  updateContacts: (payload: UserData & { key: string }) =>
+  updateContacts: (payload: UserData & { key: UserData["name"] }) =>
     dispatch(updateContact(payload)),
   createContacts: (payload: UserData) => dispatch(createContact(payload)),
   deleteContacts: (name: UserData["name"]) => dispatch(deleteContact(name)),

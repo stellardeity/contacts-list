@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "antd";
 import { ModalAction, UserData } from "../types";
 import ModalUser from "./Modal";
@@ -38,7 +38,7 @@ const UsersList: React.FC<Props> = ({
       {list.map(({ name, phone }, i) => (
         <div
           style={{
-            marginTop: 20,
+            marginTop: 10,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",

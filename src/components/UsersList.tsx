@@ -1,5 +1,5 @@
-import { Button } from "antd";
 import { useMemo, useState } from "react";
+import { Button } from "antd";
 import { ModalAction, UserData } from "../types";
 import ModalUser from "./ModalUser";
 

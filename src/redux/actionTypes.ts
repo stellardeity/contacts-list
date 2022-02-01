@@ -1,0 +1,8 @@
+const TYPES = {
+  UPDATE_CONTACTS: "contacts/UPDATE_CONTACTS",
+  CREATE_CONTACTS: "contacts/CREATE_CONTACTS",
+  FETCH_CONTACTS: "contacts/FETCH_CONTACTS",
+  DELETE_CONTACTS: "contacts/DELETE_CONTACTS",
+} as const;
+
+export default TYPES;

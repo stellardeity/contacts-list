@@ -1,3 +1,5 @@
+import TYPES from "./redux/actionTypes";
+
 export type UserData = {
   name: string;
   phone: string;
@@ -10,22 +12,22 @@ export enum ModalAction {
 
 // Redux
 interface IDeleteContacts {
-  type: "contacts/DELETE_CONTACTS";
+  type: typeof TYPES.DELETE_CONTACTS;
   payload: string;
 }
 
 interface IUpdateContacts {
-  type: "contacts/UPDATE_CONTACTS";
+  type: typeof TYPES.UPDATE_CONTACTS;
   payload: UserData & { key: string };
 }
 
 interface ICreateContacts {
-  type: "contacts/CREATE_CONTACTS";
+  type: typeof TYPES.CREATE_CONTACTS;
   payload: UserData;
 }
 
 interface IFetchContacts {
-  type: "contacts/FETCH_CONTACTS";
+  type: typeof TYPES.FETCH_CONTACTS;
   payload: UserData[];
 }
 

@@ -1,5 +1,5 @@
-import { Button, Input } from "antd";
 import { useState } from "react";
+import { Button, Input } from "antd";
 import { ModalAction, UserData } from "../types";
 import ModalUser from "./ModalUser";
 import UsersList from "./UsersList";

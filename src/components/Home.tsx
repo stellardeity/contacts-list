@@ -16,11 +16,11 @@ const Home: React.FC = () => {
 
   return (
     <Wrapper>
-      <Search updateSearch={setSearch} contacts={contacts} />
+      <Search search={search} updateSearch={setSearch} contacts={contacts} />
       <Button style={{ marginBottom: "30px" }} onClick={() => setOpen(!open)}>
         Create Modal
       </Button>
-      <UsersList search={search} contacts={contacts} updateOpen={setOpen} />
+      <UsersList search={search} updateSearch={setSearch} contacts={contacts} updateOpen={setOpen} />
 
       {open && (
         <ModalUser

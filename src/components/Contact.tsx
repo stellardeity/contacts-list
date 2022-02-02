@@ -8,6 +8,7 @@ type Props = {
   data: UserData;
   updateOpen: (val: boolean) => void;
   updateInfo: (val: UserData) => void;
+  updateSearch: (val: UserData[] | null) => void
 };
 
 const ContactComponent: React.FC<Props> = ({
@@ -15,12 +16,18 @@ const ContactComponent: React.FC<Props> = ({
   data: { phone, name },
   updateInfo,
   updateOpen,
+  updateSearch,
 }) => {
   const dispatch = useDispatch();
   const handleEditData = ({ name, phone }: UserData) => {
     updateOpen(true);
     updateInfo({ name, phone });
   };
+
+  const handleDeleteData = (name: UserData['name']) => {
+    dispatch(deleteContact(name))
+    updateSearch(null)
+  }
 
   return (
     <Contact
@@ -38,7 +45,7 @@ const ContactComponent: React.FC<Props> = ({
         <Button
           danger
           style={{ marginLeft: 10 }}
-          onClick={() => dispatch(deleteContact(name))}
+          onClick={() => handleDeleteData(name)}
         >
           Delete
         </Button>

@@ -37,6 +37,10 @@ const Wrapper = styled.div`
   min-width: 800;
   margin: 20px auto;
   padding: 10px 170px;
+
+  @media (max-width: 800px) {
+    padding: 10px;
+  }
 `;
 
 export default Home;

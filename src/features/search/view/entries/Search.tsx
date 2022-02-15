@@ -1,5 +1,5 @@
-import { Input } from "antd";
 import React, { useEffect, useState } from "react";
+import { Input } from "antd";
 
 type Props = {
   contacts: UserData[];
@@ -7,7 +7,7 @@ type Props = {
   updateSearch: (val: UserData[]) => void;
 };
 
-const Search: React.FC<Props> = ({ contacts, search, updateSearch }) => {
+export const Search: React.FC<Props> = ({ contacts, search, updateSearch }) => {
   const [value, setValue] = useState("");
   const handleSearch = ({
     target: { value },
@@ -35,5 +35,3 @@ const Search: React.FC<Props> = ({ contacts, search, updateSearch }) => {
     />
   );
 };
-
-export default Search;

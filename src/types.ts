@@ -3,3 +3,8 @@ export enum ModalAction {
   Edit = "Edit",
 }
 
+export enum errorsModalWindow {
+  phoneIncorrect = "Введен некорректный номер телефона!",
+  userAlreadyExists = "Такой пользователь уже существует!",
+};
+

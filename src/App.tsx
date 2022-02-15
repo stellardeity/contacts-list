@@ -1,12 +1,10 @@
 import { useStore } from "effector-react";
 import React, { useEffect } from "react";
-import Home from "./components/Home";
-import { $contacts, post } from "./effector";
+import { $contacts, post } from "./features/home/model";
+import { Home } from "./features/home/view";
 
 const App: React.FC = () => {
   const contacts = useStore($contacts);
-  console.log(contacts);
-
   useEffect(() => {
     post(JSON.parse(localStorage.getItem("userData") || "[]"));
   }, []);

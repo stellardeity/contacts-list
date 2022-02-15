@@ -1,6 +1,7 @@
+import React from "react";
 import { Button } from "antd";
 import styled from "styled-components";
-import { remove } from "../effector";
+import { remove } from "src/features/home/model/public";
 
 type Props = {
   border: string;
@@ -9,7 +10,7 @@ type Props = {
   updateInfo: (val: UserData) => void;
 };
 
-const ContactComponent: React.FC<Props> = ({
+export const ContactComponent: React.FC<Props> = ({
   border,
   data: { phone, name },
   updateInfo,
@@ -33,11 +34,7 @@ const ContactComponent: React.FC<Props> = ({
       </div>
       <div>
         <Button onClick={() => handleEditData({ name, phone })}>Edit</Button>
-        <Button
-          danger
-          style={{ marginLeft: 10 }}
-          onClick={() => remove(name)}
-        >
+        <Button danger style={{ marginLeft: 10 }} onClick={() => remove(name)}>
           Delete
         </Button>
       </div>
@@ -51,5 +48,3 @@ const Contact = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
-
-export default ContactComponent;

@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
-import { ModalAction } from "../types";
-import ModalUser from "./Modal";
-import ContactComponent from "./Contact";
+import React, { useMemo, useState } from "react";
+import { ModalAction } from "src/types";
+import { ContactComponent } from "../parts/Contact";
+import { ModalUser } from "src/features/modal/view";
 
 type Props = {
   search: UserData[] | null;
@@ -10,7 +10,7 @@ type Props = {
   updateSearch: (val: UserData[] | null) => void;
 };
 
-const UsersList: React.FC<Props> = ({ search, contacts }) => {
+export const UsersList: React.FC<Props> = ({ search, contacts }) => {
   const [open, setOpen] = useState(false);
   const [info, setInfo] = useState<UserData | null>(null);
   const list = useMemo(() => search || contacts, [contacts, search]);
@@ -33,15 +33,8 @@ const UsersList: React.FC<Props> = ({ search, contacts }) => {
       ))}
 
       {open && (
-        <ModalUser
-          callback={() => {}}
-          updateOpen={setOpen}
-          info={info}
-          action={ModalAction.Edit}
-        />
+        <ModalUser updateOpen={setOpen} info={info} action={ModalAction.Edit} />
       )}
     </div>
   );
 };
-
-export default UsersList;

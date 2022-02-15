@@ -1,24 +1,23 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
-import { ModalAction } from "../types";
-import { checkValidation, formatNumber } from "../helpers";
+import { formatNumber } from "src/lib/format-number";
 import styled from "styled-components";
-import { $contacts, change, insert } from "../effector";
 import { useStore } from "effector-react";
+import { validationForm } from "src/lib/validation-form";
+import { ModalAction } from "src/types";
+import { $contacts, change, insert } from "src/features/home/model";
 
 type Props = {
   action: ModalAction;
   info?: UserData | null;
   updateOpen: (val: boolean) => void;
-  callback: (val: any) => void;
   model?: any;
 };
 
-const ModalUser: React.FC<Props> = ({
+export const ModalUser: React.FC<Props> = ({
   action,
   info,
   updateOpen,
-  callback,
   model,
 }) => {
   const contacts = useStore($contacts);
@@ -42,7 +41,7 @@ const ModalUser: React.FC<Props> = ({
   };
 
   const handleSubmit = () => {
-    const error = checkValidation({ contacts, setError, newData, action });
+    const error = validationForm({ contacts, setError, newData, action });
     if (error) return null;
 
     if (newData) {
@@ -146,5 +145,3 @@ const ButtonStyled = styled(Button)`
   margin-left: 10px;
   border-radius: 5px;
 `;
-
-export default ModalUser;

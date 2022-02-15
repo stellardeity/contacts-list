@@ -8,7 +8,7 @@ type Props = {
 };
 
 const Search: React.FC<Props> = ({ contacts, search, updateSearch }) => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState("");
   const handleSearch = ({
     target: { value },
   }: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,14 +17,14 @@ const Search: React.FC<Props> = ({ contacts, search, updateSearch }) => {
       contacts.filter((e) => e.phone.match(pattern) || e.name.match(pattern))
     );
 
-    setValue(value)
+    setValue(value);
   };
 
   useEffect(() => {
     if (!search) {
-      setValue('')
+      setValue("");
     }
-  }, [contacts])
+  }, [contacts]);
 
   return (
     <Input

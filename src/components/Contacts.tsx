@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { ModalAction } from "../types";
 import ModalUser from "./Modal";
-import { updateContact } from "../redux/actions";
 import ContactComponent from "./Contact";
 
 type Props = {
@@ -11,7 +10,7 @@ type Props = {
   updateSearch: (val: UserData[] | null) => void;
 };
 
-const UsersList: React.FC<Props> = ({ search, updateSearch, contacts }) => {
+const UsersList: React.FC<Props> = ({ search, contacts }) => {
   const [open, setOpen] = useState(false);
   const [info, setInfo] = useState<UserData | null>(null);
   const list = useMemo(() => search || contacts, [contacts, search]);
@@ -25,7 +24,7 @@ const UsersList: React.FC<Props> = ({ search, updateSearch, contacts }) => {
       )}
       {list.map((data, i) => (
         <ContactComponent
-          updateSearch={updateSearch}
+          key={i}
           border={list.length - 1 === i ? "none" : "1px solid #e2e2e2"}
           data={data}
           updateInfo={setInfo}
@@ -35,7 +34,7 @@ const UsersList: React.FC<Props> = ({ search, updateSearch, contacts }) => {
 
       {open && (
         <ModalUser
-          callback={updateContact}
+          callback={() => {}}
           updateOpen={setOpen}
           info={info}
           action={ModalAction.Edit}

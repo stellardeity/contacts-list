@@ -1,14 +1,12 @@
 import { Button } from "antd";
-import { deleteContact } from "../redux/actions";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { remove } from "../effector";
 
 type Props = {
   border: string;
   data: UserData;
   updateOpen: (val: boolean) => void;
   updateInfo: (val: UserData) => void;
-  updateSearch: (val: UserData[] | null) => void
 };
 
 const ContactComponent: React.FC<Props> = ({
@@ -16,18 +14,11 @@ const ContactComponent: React.FC<Props> = ({
   data: { phone, name },
   updateInfo,
   updateOpen,
-  updateSearch,
 }) => {
-  const dispatch = useDispatch();
   const handleEditData = ({ name, phone }: UserData) => {
     updateOpen(true);
     updateInfo({ name, phone });
   };
-
-  const handleDeleteData = (name: UserData['name']) => {
-    dispatch(deleteContact(name))
-    updateSearch(null)
-  }
 
   return (
     <Contact
@@ -45,7 +36,7 @@ const ContactComponent: React.FC<Props> = ({
         <Button
           danger
           style={{ marginLeft: 10 }}
-          onClick={() => handleDeleteData(name)}
+          onClick={() => remove(name)}
         >
           Delete
         </Button>

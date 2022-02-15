@@ -2,20 +2,26 @@ import { useState } from "react";
 import { Form, Input, Button } from "antd";
 import { ModalAction } from "../types";
 import { checkValidation, formatNumber } from "../helpers";
-import { useDispatch, useSelector } from "react-redux";
-import { selectContacts } from "../redux/selectors";
 import styled from "styled-components";
+import { $contacts } from "../effector";
+import { useStore } from "effector-react";
 
 type Props = {
   action: ModalAction;
   info?: UserData | null;
   updateOpen: (val: boolean) => void;
   callback: (val: any) => void;
+  model?: any;
 };
 
-const ModalUser: React.FC<Props> = ({ action, info, updateOpen, callback }) => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
+const ModalUser: React.FC<Props> = ({
+  action,
+  info,
+  updateOpen,
+  callback,
+  model,
+}) => {
+  const contacts = useStore($contacts);
   const [newData, setNewData] = useState<UserData>(
     info || { name: "", phone: "" }
   );
@@ -41,15 +47,9 @@ const ModalUser: React.FC<Props> = ({ action, info, updateOpen, callback }) => {
 
     if (newData) {
       if (action === ModalAction.Create) {
-        dispatch(callback({ name: newData.name, phone: newData.phone }));
+        // create new contacts
       } else {
-        dispatch(
-          callback({
-            key: info?.name || "",
-            name: newData.name,
-            phone: newData.phone,
-          })
-        );
+        // edit contacts
       }
     }
     updateOpen(false);
@@ -90,7 +90,12 @@ const ModalUser: React.FC<Props> = ({ action, info, updateOpen, callback }) => {
           {error && <p style={{ color: "red" }}>{error}</p>}
 
           <Buttons>
-            <ButtonStyled size="large" type="primary" htmlType="submit">
+            <ButtonStyled
+              size="large"
+              onClick={() => model.insert(contacts, newData)}
+              type="primary"
+              htmlType="submit"
+            >
               Submit
             </ButtonStyled>
             <ButtonStyled size="large" onClick={() => updateOpen(false)}>

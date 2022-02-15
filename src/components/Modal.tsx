@@ -3,7 +3,7 @@ import { Form, Input, Button } from "antd";
 import { ModalAction } from "../types";
 import { checkValidation, formatNumber } from "../helpers";
 import styled from "styled-components";
-import { $contacts } from "../effector";
+import { $contacts, change, insert } from "../effector";
 import { useStore } from "effector-react";
 
 type Props = {
@@ -47,9 +47,13 @@ const ModalUser: React.FC<Props> = ({
 
     if (newData) {
       if (action === ModalAction.Create) {
-        // create new contacts
+        insert(newData);
       } else {
-        // edit contacts
+        change({
+          key: info?.name || "",
+          name: newData.name,
+          phone: newData.phone,
+        });
       }
     }
     updateOpen(false);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Form, Input, Button } from "antd";
 import { formatNumber } from "src/lib/format-number";
 import styled from "styled-components";
@@ -6,52 +6,54 @@ import { useStore } from "effector-react";
 import { validationForm } from "src/lib/validation-form";
 import { ModalAction } from "src/types";
 import { $contacts, change, insert } from "src/features/home/model";
+import { $data, $error, changeError, updateData } from "../../model/private";
 
 type Props = {
   action: ModalAction;
   info?: UserData | null;
   updateOpen: (val: boolean) => void;
-  model?: any;
 };
 
-export const ModalUser: React.FC<Props> = ({
-  action,
-  info,
-  updateOpen,
-  model,
-}) => {
+export const ModalUser: React.FC<Props> = ({ action, info, updateOpen }) => {
   const contacts = useStore($contacts);
-  const [newData, setNewData] = useState<UserData>(
-    info || { name: "", phone: "" }
-  );
-  const [error, setError] = useState<string | null>(null);
+  const isError = useStore($error);
+  const data = useStore($data);
 
   const handleChange = ({
     target: { value, name },
   }: React.ChangeEvent<HTMLInputElement>) => {
-    setNewData((prev: UserData) => {
-      if (name === "phone") {
-        value = formatNumber(value);
-      }
-      return {
-        ...prev,
-        [name]: value,
-      };
+    if (name === "phone") {
+      value = formatNumber(value);
+    }
+    updateData({
+      ...data,
+      [name]: value,
     });
   };
 
   const handleSubmit = () => {
-    const error = validationForm({ contacts, setError, newData, action });
-    if (error) return null;
+    const error = validationForm({
+      contacts,
+      setError: changeError,
+      newData: data,
+      action,
+    });
 
-    if (newData) {
+    if (error) {
+      setTimeout(() => {
+        changeError("");
+      }, 2000);
+      return null;
+    }
+
+    if (data) {
       if (action === ModalAction.Create) {
-        insert(newData);
+        insert(data);
       } else {
         change({
           key: info?.name || "",
-          name: newData.name,
-          phone: newData.phone,
+          name: data.name,
+          phone: data.phone,
         });
       }
     }
@@ -77,26 +79,26 @@ export const ModalUser: React.FC<Props> = ({
             name="name"
             required
             style={{ marginBottom: 10 }}
-            value={newData?.name || ""}
+            value={data?.name || ""}
             placeholder="ФИО"
             onChange={handleChange}
           />
           <InputStyled
             required
             name="phone"
-            value={newData?.phone || ""}
+            value={data?.phone || ""}
             placeholder="Номер телефона"
             maxLength={12}
             onChange={handleChange}
           />
 
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {isError && <p style={{ color: "red" }}>{isError}</p>}
 
           <Buttons>
             <ButtonStyled
               size="large"
-              onClick={() => model.insert(contacts, newData)}
               type="primary"
+              disabled={!!isError}
               htmlType="submit"
             >
               Submit

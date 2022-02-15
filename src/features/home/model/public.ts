@@ -14,8 +14,8 @@ export const $contacts = createStore<UserData[]>([])
     ...contacts,
     ...newContacts,
   ])
-  .on(remove, (contacts: UserData[], index: string) =>
-    contacts.filter((e, i) => e.name !== index)
+  .on(remove, (contacts: UserData[], name: string) =>
+    contacts.filter((e) => e.name !== name)
   )
   .on(
     change,

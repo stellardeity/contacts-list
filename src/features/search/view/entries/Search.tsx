@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Input } from "antd";
+import { $input, change } from "../../model/private";
+import { useStore } from "effector-react";
 
 type Props = {
   contacts: UserData[];
@@ -8,7 +10,8 @@ type Props = {
 };
 
 export const Search: React.FC<Props> = ({ contacts, search, updateSearch }) => {
-  const [value, setValue] = useState("");
+  const value = useStore($input);
+
   const handleSearch = ({
     target: { value },
   }: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,12 +20,12 @@ export const Search: React.FC<Props> = ({ contacts, search, updateSearch }) => {
       contacts.filter((e) => e.phone.match(pattern) || e.name.match(pattern))
     );
 
-    setValue(value);
+    change(value);
   };
 
   useEffect(() => {
     if (!search) {
-      setValue("");
+      change("");
     }
   }, [contacts]);
 

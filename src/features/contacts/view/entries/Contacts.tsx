@@ -2,8 +2,9 @@ import React, { useMemo } from "react";
 import { ModalAction } from "src/types";
 import { ContactComponent } from "../parts/Contact";
 import { ModalUser } from "src/features/modal/view";
-import { $info, $open, changeOpen, setInfo } from "../../model/private";
+import { changeOpen, setInfo } from "../../model/private";
 import { useStore } from "effector-react";
+import { $info, $open } from "../../model/init";
 
 type Props = {
   search: UserData[];

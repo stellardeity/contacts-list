@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { Input } from "antd";
-import { $input, change } from "../../model/private";
+import { change } from "../../model/private";
 import { useStore } from "effector-react";
+import { $input } from "../../model/init";
 
 type Props = {
   contacts: UserData[];

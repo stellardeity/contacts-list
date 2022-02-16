@@ -5,8 +5,10 @@ import styled from "styled-components";
 import { useStore } from "effector-react";
 import { validationForm } from "src/lib/validation-form";
 import { ModalAction } from "src/types";
-import { $contacts, change, insert } from "src/features/home/model";
-import { $data, $error, changeError, updateData } from "../../model/private";
+import { change, insert } from "src/features/home/model";
+import { changeError, updateData } from "../../model/private";
+import { $contacts } from "src/features/home/model/init";
+import { $data, $error } from "../../model/init";
 
 type Props = {
   action: ModalAction;

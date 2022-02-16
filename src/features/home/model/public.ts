@@ -1,18 +1,23 @@
-import { createEvent, createStore } from "effector";
+import { createEffect, createEvent, createStore, sample } from "effector";
+import connectLocalStorage from "effector-localstorage";
 
 export const remove = createEvent<string>();
 export const change = createEvent<UserData & { key: string }>();
-export const post = createEvent<UserData[]>();
 export const insert = createEvent<UserData>();
+const saveContact = createEffect((params: UserData[]) => {
+  localStorage.setItem("userData", JSON.stringify(params));
+});
 
-export const $contacts = createStore<UserData[]>([])
+const counterLocalStorage = connectLocalStorage("userData").onError(
+  (err: string) => console.log(err)
+);
+
+export const $contacts = createStore<UserData[]>(
+  counterLocalStorage.init(0) || []
+)
   .on(insert, (contacts: UserData[], newContact: UserData) => [
     ...contacts,
     newContact,
-  ])
-  .on(post, (contacts: UserData[], newContacts: UserData[]) => [
-    ...contacts,
-    ...newContacts,
   ])
   .on(remove, (contacts: UserData[], name: string) =>
     contacts.filter((e) => e.name !== name)
@@ -29,3 +34,8 @@ export const $contacts = createStore<UserData[]>([])
         return e;
       })
   );
+
+sample({
+  clock: $contacts,
+  target: saveContact,
+});

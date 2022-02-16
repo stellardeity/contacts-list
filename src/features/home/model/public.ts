@@ -9,7 +9,7 @@ const saveContact = createEffect((params: UserData[]) => {
 });
 
 const counterLocalStorage = connectLocalStorage("userData").onError(
-  (err: string) => console.log(err)
+  (err: string) => localStorage.setItem("userData", JSON.stringify([]))
 );
 
 export const $contacts = createStore<UserData[]>(

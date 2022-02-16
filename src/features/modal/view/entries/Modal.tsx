@@ -1,55 +1,60 @@
-import { useState } from "react";
+import React from "react";
 import { Form, Input, Button } from "antd";
-import { ModalAction } from "../types";
-import { checkValidation, formatNumber } from "../helpers";
-import { useDispatch, useSelector } from "react-redux";
-import { selectContacts } from "../redux/selectors";
+import { formatNumber } from "src/lib/format-number";
 import styled from "styled-components";
+import { useStore } from "effector-react";
+import { validationForm } from "src/lib/validation-form";
+import { ModalAction } from "src/types";
+import { $contacts, change, insert } from "src/features/home/model";
+import { $data, $error, changeError, updateData } from "../../model/private";
 
 type Props = {
   action: ModalAction;
   info?: UserData | null;
   updateOpen: (val: boolean) => void;
-  callback: (val: any) => void;
 };
 
-const ModalUser: React.FC<Props> = ({ action, info, updateOpen, callback }) => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
-  const [newData, setNewData] = useState<UserData>(
-    info || { name: "", phone: "" }
-  );
-  const [error, setError] = useState<string | null>(null);
+export const ModalUser: React.FC<Props> = ({ action, info, updateOpen }) => {
+  const contacts = useStore($contacts);
+  const isError = useStore($error);
+  const data = useStore($data);
 
   const handleChange = ({
     target: { value, name },
   }: React.ChangeEvent<HTMLInputElement>) => {
-    setNewData((prev: UserData) => {
-      if (name === "phone") {
-        value = formatNumber(value);
-      }
-      return {
-        ...prev,
-        [name]: value,
-      };
+    if (name === "phone") {
+      value = formatNumber(value);
+    }
+    updateData({
+      ...data,
+      [name]: value,
     });
   };
 
   const handleSubmit = () => {
-    const error = checkValidation({ contacts, setError, newData, action });
-    if (error) return null;
+    const error = validationForm({
+      contacts,
+      setError: changeError,
+      newData: data,
+      action,
+    });
 
-    if (newData) {
+    if (error) {
+      setTimeout(() => {
+        changeError("");
+      }, 2000);
+      return null;
+    }
+
+    if (data) {
       if (action === ModalAction.Create) {
-        dispatch(callback({ name: newData.name, phone: newData.phone }));
+        insert(data);
       } else {
-        dispatch(
-          callback({
-            key: info?.name || "",
-            name: newData.name,
-            phone: newData.phone,
-          })
-        );
+        change({
+          key: info?.name || "",
+          name: data.name,
+          phone: data.phone,
+        });
       }
     }
     updateOpen(false);
@@ -74,23 +79,28 @@ const ModalUser: React.FC<Props> = ({ action, info, updateOpen, callback }) => {
             name="name"
             required
             style={{ marginBottom: 10 }}
-            value={newData?.name || ""}
+            value={data?.name || ""}
             placeholder="ФИО"
             onChange={handleChange}
           />
           <InputStyled
             required
             name="phone"
-            value={newData?.phone || ""}
+            value={data?.phone || ""}
             placeholder="Номер телефона"
             maxLength={12}
             onChange={handleChange}
           />
 
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {isError && <p style={{ color: "red" }}>{isError}</p>}
 
           <Buttons>
-            <ButtonStyled size="large" type="primary" htmlType="submit">
+            <ButtonStyled
+              size="large"
+              type="primary"
+              disabled={!!isError}
+              htmlType="submit"
+            >
               Submit
             </ButtonStyled>
             <ButtonStyled size="large" onClick={() => updateOpen(false)}>
@@ -137,5 +147,3 @@ const ButtonStyled = styled(Button)`
   margin-left: 10px;
   border-radius: 5px;
 `;
-
-export default ModalUser;

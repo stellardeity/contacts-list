@@ -1,33 +1,25 @@
+import React from "react";
 import { Button } from "antd";
-import { deleteContact } from "../redux/actions";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { remove } from "src/features/home/model/public";
 
 type Props = {
   border: string;
   data: UserData;
   updateOpen: (val: boolean) => void;
   updateInfo: (val: UserData) => void;
-  updateSearch: (val: UserData[] | null) => void
 };
 
-const ContactComponent: React.FC<Props> = ({
+export const ContactComponent: React.FC<Props> = ({
   border,
   data: { phone, name },
   updateInfo,
   updateOpen,
-  updateSearch,
 }) => {
-  const dispatch = useDispatch();
   const handleEditData = ({ name, phone }: UserData) => {
     updateOpen(true);
     updateInfo({ name, phone });
   };
-
-  const handleDeleteData = (name: UserData['name']) => {
-    dispatch(deleteContact(name))
-    updateSearch(null)
-  }
 
   return (
     <Contact
@@ -42,11 +34,7 @@ const ContactComponent: React.FC<Props> = ({
       </div>
       <div>
         <Button onClick={() => handleEditData({ name, phone })}>Edit</Button>
-        <Button
-          danger
-          style={{ marginLeft: 10 }}
-          onClick={() => handleDeleteData(name)}
-        >
+        <Button danger style={{ marginLeft: 10 }} onClick={() => remove(name)}>
           Delete
         </Button>
       </div>
@@ -60,5 +48,3 @@ const Contact = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
-
-export default ContactComponent;

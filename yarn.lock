@@ -3711,6 +3711,11 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
+effector-forms@^0.0.23-alpha.0:
+  version "0.0.23-alpha.0"
+  resolved "https://registry.yarnpkg.com/effector-forms/-/effector-forms-0.0.23-alpha.0.tgz#7f5670623991193ef958aba6533886d4648bf9da"
+  integrity sha512-I1h0SdME8/8LV0uOpQFRwGNv5RbROmiElCJs3tpt1gc2OujjYQZOBhxZMcX2elF2yumlGd7vlGKqYNxnK67YCQ==
+
 effector-react@^22.0.6:
   version "22.0.6"
   resolved "https://registry.yarnpkg.com/effector-react/-/effector-react-22.0.6.tgz#e6651febfc124a8adf550deb950fbd03dfb9ec4e"

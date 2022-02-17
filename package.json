@@ -5,6 +5,7 @@
   "dependencies": {
     "antd": "^4.18.5",
     "effector": "^22.2.0",
+    "effector-forms": "^0.0.23-alpha.0",
     "effector-react": "^22.0.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

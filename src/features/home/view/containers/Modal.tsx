@@ -1,52 +1,32 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
-import { formatNumber } from "src/lib/format-number";
 import styled from "styled-components";
 import { useStore } from "effector-react";
 import { ModalAction } from "src/types";
-import { updateData } from "../../model/private";
-import { $data, loginForm, loginFx } from "../../model/init";
-import { setShowModal } from "src/features/home/model/private";
+import { UserDataForm } from "../../model/init";
+import {
+  $editContactData,
+  handlerUserData,
+  setShowModalCreate,
+  setShowModalEdit,
+} from "src/features/home/model/private";
 import { useForm } from "effector-forms";
 
 type Props = {
   action: ModalAction;
-  contact?: UserData;
 };
 
-export const ModalUser: React.FC<Props> = ({ action, contact }) => {
-  const data = useStore($data);
+export const ModalUser: React.FC<Props> = ({ action }) => {
+  const { fields } = useForm(UserDataForm);
+  const pending = useStore(handlerUserData.pending);
+  const contact = useStore($editContactData);
 
-  const { fields, submit } = useForm(loginForm);
-  const pending = useStore(loginFx.pending);
-
-  const handleChange = ({
-    target: { value, name },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    if (name === "phone") {
-      value = formatNumber(value);
-    }
-    updateData({
-      ...data,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    submit();
-    // if (data) {
-    //   if (action === ModalAction.Create) {
-    //     insertContact(data);
-    //   } else {
-    //     changeContact({
-    //       key: contact?.name || "",
-    //       name: data.name,
-    //       phone: data.phone,
-    //     });
-    //   }
-    // }
-    // setShowModal(false);
+  const handleSubmit = () => {
+    const data = { name: fields.name.value, phone: fields.phone.value };
+    handlerUserData({ data, action, contact });
+    action === ModalAction.Create
+      ? setShowModalCreate(false)
+      : setShowModalEdit(false);
   };
 
   return (
@@ -68,30 +48,26 @@ export const ModalUser: React.FC<Props> = ({ action, contact }) => {
             name="name"
             disabled={pending}
             required
-            value={fields.email.value}
+            value={fields.name.value}
             style={{ marginBottom: 10 }}
-            // value={data?.name || ""}
             placeholder="ФИО"
-            // onChange={handleChange}
-            onChange={(e) => fields.email.onChange(e.target.value)}
+            onChange={({ target }) => fields.name.onChange(target.value)}
           />
           <InputStyled
             required
             disabled={pending}
             name="phone"
-            // value={data?.phone || ""}
-            value={fields.password.value}
+            value={fields.phone.value}
             placeholder="Номер телефона"
             maxLength={12}
-            // onChange={handleChange}
-            onChange={(e) => fields.password.onChange(e.target.value)}
+            onChange={({ target }) => fields.phone.onChange(target.value)}
           />
 
-          {fields.email.errorText({
-            email: "you must enter a valid email address",
+          {fields.name.errorText({
+            name: "you must enter a valid name address",
           })}
-          {fields.password.errorText({
-            required: "password required",
+          {fields.phone.errorText({
+            required: "phone required",
           })}
 
           <Buttons>
@@ -103,7 +79,14 @@ export const ModalUser: React.FC<Props> = ({ action, contact }) => {
             >
               Submit
             </ButtonStyled>
-            <ButtonStyled size="large" onClick={() => setShowModal(false)}>
+            <ButtonStyled
+              size="large"
+              onClick={() =>
+                action === ModalAction.Create
+                  ? setShowModalCreate(false)
+                  : setShowModalEdit(false)
+              }
+            >
               Cancel
             </ButtonStyled>
           </Buttons>

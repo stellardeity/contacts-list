@@ -3,16 +3,16 @@ import { Button } from "antd";
 import styled from "styled-components";
 import { useStore } from "effector-react";
 import { ModalAction } from "src/types";
-import { $open, setShowModal } from "../../model/private";
+import { $openCreate, setShowModalCreate } from "../../model/private";
 import { Contacts, ModalUser, Search } from "../containers";
 
 export const Home: React.FC = () => {
-  const open = useStore($open);
+  const open = useStore($openCreate);
 
   return (
     <Wrapper>
       <Search />
-      <ButtonWithMargin onClick={() => setShowModal(!open)}>
+      <ButtonWithMargin onClick={() => setShowModalCreate(!open)}>
         Create Modal
       </ButtonWithMargin>
       <Contacts />

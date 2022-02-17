@@ -2,14 +2,24 @@ import React from "react";
 import { ModalAction } from "src/types";
 import { ContactComponent } from "../parts/Contact";
 import { useStore } from "effector-react";
-import { $contacts, $open } from "src/features/home/model/private";
-import { $filteredContacts } from "../../model/init";
+import {
+  $contacts,
+  $filteredContacts,
+  $openEdit,
+  setEditContactData,
+  setShowModalEdit,
+} from "src/features/home/model/private";
 import { ModalUser } from "./Modal";
 
 export const Contacts: React.FC = () => {
-  const open = useStore($open);
+  const open = useStore($openEdit);
   const search = useStore($filteredContacts);
   const contacts = useStore($contacts);
+
+  const handleEditData = (data: UserData) => {
+    setShowModalEdit(true);
+    setEditContactData(data);
+  };
 
   return (
     <div>
@@ -20,8 +30,12 @@ export const Contacts: React.FC = () => {
       )}
       {search.map((data, i) => (
         <div key={data.name + data.phone}>
-          <ContactComponent border={search.length - 1 === i} data={data} />
-          {open && <ModalUser contact={data} action={ModalAction.Edit} />}
+          <ContactComponent
+            handleEditData={handleEditData}
+            border={search.length - 1 === i}
+            data={data}
+          />
+          {open && <ModalUser action={ModalAction.Edit} />}
         </div>
       ))}
     </div>

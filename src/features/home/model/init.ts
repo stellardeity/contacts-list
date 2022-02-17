@@ -1,36 +1,28 @@
-import { combine, createEffect, createStore, forward, sample } from "effector";
+import { combine, sample } from "effector";
 import { createForm } from "effector-forms";
+import { createEmptyUserDataArr } from "src/lib/empty-userdata";
 import {
   $contacts,
-  $open,
+  $editContactData,
+  $openCreate,
+  $openEdit,
   $search,
   changeContact,
   changeSearch,
   insertContact,
   removeContact,
   reset,
-  updateData,
+  setEditContactData,
+  setShowModalCreate,
+  setShowModalEdit,
 } from "./private";
-import { setShowModal, getContactsList, saveContact } from "./private";
+import { getContactsList, saveContact } from "./private";
 
-export const $data = createStore({ name: "", phone: "" }).on(
-  updateData,
-  (_, value) => value
-);
-
-$open.on(setShowModal, (_, value) => value);
+$openCreate.on(setShowModalCreate, (_, value) => value);
+$openEdit.on(setShowModalEdit, (_, value) => value);
 $search.on(changeSearch, (_, value) => value);
 
-export const $filteredContacts = combine(
-  $contacts,
-  $search,
-  (contacts, value) => {
-    const pattern = new RegExp(value, "gi");
-    return contacts.filter(
-      (e) => e.phone.match(pattern) || e.name.match(pattern)
-    );
-  }
-);
+$editContactData.on(setEditContactData, (_, value) => value);
 
 $contacts
   .on(insertContact, (contacts: UserData[], newContact: UserData) => [
@@ -52,47 +44,23 @@ $contacts
       })
   )
   .on(getContactsList.done, (_, { result }) => result)
-  .on(reset, () => createEmptyUserData())
+  .on(reset, () => createEmptyUserDataArr())
   .on(getContactsList.fail, () => []);
-
-getContactsList();
 
 sample({
   clock: $contacts,
   target: saveContact,
 });
-function createEmptyUserData(): void | UserData[] {
-  throw new Error("Function not implemented.");
-}
 
-// ===================================
-export const loginForm = createForm({
+export const UserDataForm = createForm({
   fields: {
-    email: {
-      init: "", // field's store initial value
-      rules: [
-        {
-          name: "email",
-          validator: (value: string) => /\S+@\S+\.\S+/.test(value),
-        },
-      ],
+    name: {
+      init: "",
     },
-    password: {
-      init: "", // field's store initial value
-      rules: [
-        {
-          name: "required",
-          validator: (value: string) => Boolean(value),
-        },
-      ],
+    phone: {
+      init: "",
     },
   },
-  validateOn: ["submit"],
 });
 
-export const loginFx = createEffect();
-
-forward({
-  from: loginForm.formValidated,
-  to: loginFx,
-});
+getContactsList();

@@ -2,13 +2,12 @@ import React from "react";
 import { Button } from "antd";
 import styled from "styled-components";
 import { useStore } from "effector-react";
-// import { Search } from "src/features/search/view";
 import { UsersList } from "src/features/contacts/view/entries";
 import { ModalUser } from "src/features/modal/view";
 import { ModalAction } from "src/types";
 import { setShowModal } from "../../model/private";
-import { $open } from "../../model/init";
 import { Search } from "src/features/search/view";
+import { $open } from "../../model";
 
 export const Home: React.FC = () => {
   const open = useStore($open);

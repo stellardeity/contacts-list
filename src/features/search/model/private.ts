@@ -1,8 +1,8 @@
-import { combine, createEvent, createStore } from "effector";
-import { $contacts } from "src/features/home/model/init";
+import { combine } from "effector";
+import { $contacts } from "src/features/home/model";
+import { $search, changeSearch } from "./init";
 
-export const changeSearch = createEvent<string>();
-export const $search = createStore("").on(changeSearch, (_, value) => value);
+$search.on(changeSearch, (_, value) => value);
 
 export const $filteredContacts = combine(
   $contacts,

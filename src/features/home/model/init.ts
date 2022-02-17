@@ -1,10 +1,16 @@
-import { createStore, sample } from "effector";
-import { changeContact, insertContact, removeContact } from "./public";
+import { sample } from "effector";
+import {
+  $contacts,
+  $open,
+  changeContact,
+  insertContact,
+  removeContact,
+} from "./public";
 import { setShowModal, getContactsList, saveContact } from "./private";
 
-export const $open = createStore(false).on(setShowModal, (_, value) => value);
+$open.on(setShowModal, (_, value) => value);
 
-export const $contacts = createStore<UserData[]>([])
+$contacts
   .on(insertContact, (contacts: UserData[], newContact: UserData) => [
     ...contacts,
     newContact,

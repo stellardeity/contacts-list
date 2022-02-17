@@ -3,8 +3,8 @@ import { ModalAction } from "src/types";
 import { ContactComponent } from "../parts/Contact";
 import { ModalUser } from "src/features/modal/view";
 import { useStore } from "effector-react";
-import { $contacts, $open } from "src/features/home/model/init";
 import { $filteredContacts } from "src/features/search/model/private";
+import { $contacts, $open } from "src/features/home/model";
 
 export const UsersList: React.FC = () => {
   const open = useStore($open);

@@ -5,9 +5,10 @@ import styled from "styled-components";
 import { useStore } from "effector-react";
 import { ModalAction } from "src/types";
 import { changeContact, insertContact } from "src/features/home/model";
-import { updateData } from "../../model/private";
-import { $data, $error } from "../../model/init";
+import { $error, updateData } from "../../model/private";
+import { $data, loginForm } from "../../model/init";
 import { setShowModal } from "src/features/home/model/private";
+import { useForm } from "effector-forms";
 
 type Props = {
   action: ModalAction;
@@ -15,8 +16,12 @@ type Props = {
 };
 
 export const ModalUser: React.FC<Props> = ({ action, contact }) => {
+  const { fields } = useForm(loginForm);
+
   const isError = useStore($error);
   const data = useStore($data);
+
+  console.log(fields);
 
   const handleChange = ({
     target: { value, name },

@@ -5,18 +5,18 @@ import styled from "styled-components";
 import { useStore } from "effector-react";
 import { validationForm } from "src/lib/validation-form";
 import { ModalAction } from "src/types";
-import { change, insert } from "src/features/home/model";
+import { changeContact, insertContact } from "src/features/home/model";
 import { changeError, updateData } from "../../model/private";
 import { $contacts } from "src/features/home/model/init";
 import { $data, $error } from "../../model/init";
+import { setShowModal } from "src/features/home/model/private";
 
 type Props = {
   action: ModalAction;
-  info?: UserData | null;
-  updateOpen: (val: boolean) => void;
+  contact?: UserData;
 };
 
-export const ModalUser: React.FC<Props> = ({ action, info, updateOpen }) => {
+export const ModalUser: React.FC<Props> = ({ action, contact }) => {
   const contacts = useStore($contacts);
   const isError = useStore($error);
   const data = useStore($data);
@@ -50,16 +50,16 @@ export const ModalUser: React.FC<Props> = ({ action, info, updateOpen }) => {
 
     if (data) {
       if (action === ModalAction.Create) {
-        insert(data);
+        insertContact(data);
       } else {
-        change({
-          key: info?.name || "",
+        changeContact({
+          key: contact?.name || "",
           name: data.name,
           phone: data.phone,
         });
       }
     }
-    updateOpen(false);
+    setShowModal(false);
   };
 
   return (
@@ -74,7 +74,7 @@ export const ModalUser: React.FC<Props> = ({ action, info, updateOpen }) => {
           <h1 style={{ marginBottom: 30, fontSize: 20 }}>
             {action === ModalAction.Create
               ? "Содать новый контакт"
-              : `${info?.name}`}
+              : `${contact?.name}`}
           </h1>
 
           <InputStyled
@@ -105,7 +105,7 @@ export const ModalUser: React.FC<Props> = ({ action, info, updateOpen }) => {
             >
               Submit
             </ButtonStyled>
-            <ButtonStyled size="large" onClick={() => updateOpen(false)}>
+            <ButtonStyled size="large" onClick={() => setShowModal(false)}>
               Cancel
             </ButtonStyled>
           </Buttons>

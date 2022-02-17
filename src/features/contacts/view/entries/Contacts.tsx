@@ -1,50 +1,29 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { ModalAction } from "src/types";
 import { ContactComponent } from "../parts/Contact";
 import { ModalUser } from "src/features/modal/view";
-import { changeOpen, setInfo } from "../../model/private";
 import { useStore } from "effector-react";
-import { $info, $open } from "../../model/init";
+import { $contacts, $open } from "src/features/home/model/init";
+import { $filteredContacts } from "src/features/search/model/private";
 
-type Props = {
-  search: UserData[];
-  contacts: UserData[];
-  updateOpen: (val: boolean) => void;
-  updateSearch: (val: UserData[]) => void;
-};
-
-export const UsersList: React.FC<Props> = ({ search, contacts }) => {
+export const UsersList: React.FC = () => {
   const open = useStore($open);
-  const info = useStore($info);
-  const list = useMemo(
-    () => (search.length ? search : contacts),
-    [contacts, search]
-  );
+  const search = useStore($filteredContacts);
+  const contacts = useStore($contacts);
 
   return (
     <div>
-      {search.length && search.length !== contacts.length ? (
+      {search.length ? (
         <h2>Найдено контактов {search.length}</h2>
       ) : (
         <h2>Общее количество контактов {contacts.length}</h2>
       )}
-      {list.map((data, i) => (
-        <ContactComponent
-          key={i}
-          border={list.length - 1 === i ? "none" : "1px solid #e2e2e2"}
-          data={data}
-          updateInfo={setInfo}
-          updateOpen={changeOpen}
-        />
+      {search.map((data, i) => (
+        <div key={data.name + data.phone}>
+          <ContactComponent border={search.length - 1 === i} data={data} />
+          {open && <ModalUser contact={data} action={ModalAction.Edit} />}
+        </div>
       ))}
-
-      {open && (
-        <ModalUser
-          updateOpen={changeOpen}
-          info={info}
-          action={ModalAction.Edit}
-        />
-      )}
     </div>
   );
 };

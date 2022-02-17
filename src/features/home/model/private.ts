@@ -1,7 +1,6 @@
 import { createEffect, createEvent } from "effector";
 
-export const changeOpen = createEvent<boolean>();
-export const updateSearch = createEvent<UserData[]>();
+export const setShowModal = createEvent<boolean>();
 
 export const saveContact = createEffect((params: UserData[]) => {
   localStorage.setItem("userData", JSON.stringify(params));

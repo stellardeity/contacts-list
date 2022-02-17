@@ -3,11 +3,9 @@ import { Form, Input, Button } from "antd";
 import { formatNumber } from "src/lib/format-number";
 import styled from "styled-components";
 import { useStore } from "effector-react";
-import { validationForm } from "src/lib/validation-form";
 import { ModalAction } from "src/types";
 import { changeContact, insertContact } from "src/features/home/model";
-import { changeError, updateData } from "../../model/private";
-import { $contacts } from "src/features/home/model/init";
+import { updateData } from "../../model/private";
 import { $data, $error } from "../../model/init";
 import { setShowModal } from "src/features/home/model/private";
 
@@ -17,7 +15,6 @@ type Props = {
 };
 
 export const ModalUser: React.FC<Props> = ({ action, contact }) => {
-  const contacts = useStore($contacts);
   const isError = useStore($error);
   const data = useStore($data);
 
@@ -34,20 +31,6 @@ export const ModalUser: React.FC<Props> = ({ action, contact }) => {
   };
 
   const handleSubmit = () => {
-    const error = validationForm({
-      contacts,
-      setError: changeError,
-      newData: data,
-      action,
-    });
-
-    if (error) {
-      setTimeout(() => {
-        changeError("");
-      }, 2000);
-      return null;
-    }
-
     if (data) {
       if (action === ModalAction.Create) {
         insertContact(data);

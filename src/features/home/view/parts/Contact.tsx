@@ -1,16 +1,18 @@
 import React from "react";
 import { Button } from "antd";
 import styled from "styled-components";
-import { removeContact, setShowModal } from "src/features/home/model/private";
+import { removeContact } from "src/features/home/model/private";
 
 type Props = {
   border: boolean;
   data: UserData;
+  handleEditData: (val: UserData) => void;
 };
 
 export const ContactComponent: React.FC<Props> = ({
   border,
   data: { phone, name },
+  handleEditData,
 }) => (
   <Contact border={border} key={name}>
     <div>
@@ -18,7 +20,7 @@ export const ContactComponent: React.FC<Props> = ({
       <p>{phone}</p>
     </div>
     <div>
-      <Button onClick={() => setShowModal(true)}>Edit</Button>
+      <Button onClick={() => handleEditData({ phone, name })}>Edit</Button>
       <ButtonWithMargin danger style={{}} onClick={() => removeContact(name)}>
         Delete
       </ButtonWithMargin>

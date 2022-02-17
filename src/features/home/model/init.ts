@@ -1,38 +1,28 @@
-import { combine, createStore, sample } from "effector";
+import { combine, sample } from "effector";
+import { createForm } from "effector-forms";
+import { createEmptyUserDataArr } from "src/lib/empty-userdata";
 import {
   $contacts,
-  $error,
-  $open,
+  $editContactData,
+  $openCreate,
+  $openEdit,
   $search,
   changeContact,
-  changeError,
   changeSearch,
   insertContact,
   removeContact,
   reset,
-  updateData,
+  setEditContactData,
+  setShowModalCreate,
+  setShowModalEdit,
 } from "./private";
-import { setShowModal, getContactsList, saveContact } from "./private";
+import { getContactsList, saveContact } from "./private";
 
-$error.on(changeError, (_, value) => value);
-export const $data = createStore({ name: "", phone: "" }).on(
-  updateData,
-  (_, value) => value
-);
-
-$open.on(setShowModal, (_, value) => value);
+$openCreate.on(setShowModalCreate, (_, value) => value);
+$openEdit.on(setShowModalEdit, (_, value) => value);
 $search.on(changeSearch, (_, value) => value);
 
-export const $filteredContacts = combine(
-  $contacts,
-  $search,
-  (contacts, value) => {
-    const pattern = new RegExp(value, "gi");
-    return contacts.filter(
-      (e) => e.phone.match(pattern) || e.name.match(pattern)
-    );
-  }
-);
+$editContactData.on(setEditContactData, (_, value) => value);
 
 $contacts
   .on(insertContact, (contacts: UserData[], newContact: UserData) => [
@@ -54,15 +44,23 @@ $contacts
       })
   )
   .on(getContactsList.done, (_, { result }) => result)
-  .on(reset, () => createEmptyUserData())
+  .on(reset, () => createEmptyUserDataArr())
   .on(getContactsList.fail, () => []);
-
-getContactsList();
 
 sample({
   clock: $contacts,
   target: saveContact,
 });
-function createEmptyUserData(): void | UserData[] {
-  throw new Error("Function not implemented.");
-}
+
+export const UserDataForm = createForm({
+  fields: {
+    name: {
+      init: "",
+    },
+    phone: {
+      init: "",
+    },
+  },
+});
+
+getContactsList();

@@ -1,48 +1,32 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
-import { formatNumber } from "src/lib/format-number";
 import styled from "styled-components";
 import { useStore } from "effector-react";
 import { ModalAction } from "src/types";
-import { changeContact, insertContact } from "src/features/home/model/private";
-import { $error, updateData } from "../../model/private";
-import { $data } from "../../model/init";
-import { setShowModal } from "src/features/home/model/private";
+import { UserDataForm } from "../../model/init";
+import {
+  $editContactData,
+  handlerUserData,
+  setShowModalCreate,
+  setShowModalEdit,
+} from "src/features/home/model/private";
+import { useForm } from "effector-forms";
 
 type Props = {
   action: ModalAction;
-  contact?: UserData;
 };
 
-export const ModalUser: React.FC<Props> = ({ action, contact }) => {
-  const isError = useStore($error);
-  const data = useStore($data);
-
-  const handleChange = ({
-    target: { value, name },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    if (name === "phone") {
-      value = formatNumber(value);
-    }
-    updateData({
-      ...data,
-      [name]: value,
-    });
-  };
+export const ModalUser: React.FC<Props> = ({ action }) => {
+  const { fields } = useForm(UserDataForm);
+  const pending = useStore(handlerUserData.pending);
+  const contact = useStore($editContactData);
 
   const handleSubmit = () => {
-    if (data) {
-      if (action === ModalAction.Create) {
-        insertContact(data);
-      } else {
-        changeContact({
-          key: contact?.name || "",
-          name: data.name,
-          phone: data.phone,
-        });
-      }
-    }
-    setShowModal(false);
+    const data = { name: fields.name.value, phone: fields.phone.value };
+    handlerUserData({ data, action, contact });
+    action === ModalAction.Create
+      ? setShowModalCreate(false)
+      : setShowModalEdit(false);
   };
 
   return (
@@ -62,33 +46,47 @@ export const ModalUser: React.FC<Props> = ({ action, contact }) => {
 
           <InputStyled
             name="name"
+            disabled={pending}
             required
+            value={fields.name.value}
             style={{ marginBottom: 10 }}
-            value={data?.name || ""}
             placeholder="ФИО"
-            onChange={handleChange}
+            onChange={({ target }) => fields.name.onChange(target.value)}
           />
           <InputStyled
             required
+            disabled={pending}
             name="phone"
-            value={data?.phone || ""}
+            value={fields.phone.value}
             placeholder="Номер телефона"
             maxLength={12}
-            onChange={handleChange}
+            onChange={({ target }) => fields.phone.onChange(target.value)}
           />
 
-          {isError && <p style={{ color: "red" }}>{isError}</p>}
+          {fields.name.errorText({
+            name: "you must enter a valid name address",
+          })}
+          {fields.phone.errorText({
+            required: "phone required",
+          })}
 
           <Buttons>
             <ButtonStyled
               size="large"
               type="primary"
-              disabled={!!isError}
+              disabled={pending}
               htmlType="submit"
             >
               Submit
             </ButtonStyled>
-            <ButtonStyled size="large" onClick={() => setShowModal(false)}>
+            <ButtonStyled
+              size="large"
+              onClick={() =>
+                action === ModalAction.Create
+                  ? setShowModalCreate(false)
+                  : setShowModalEdit(false)
+              }
+            >
               Cancel
             </ButtonStyled>
           </Buttons>

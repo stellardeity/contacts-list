@@ -7,8 +7,7 @@ import { UserDataForm } from "../../model/init";
 import {
   $editContactData,
   handlerUserData,
-  setShowModalCreate,
-  setShowModalEdit,
+  setShowModal,
 } from "src/features/home/model/private";
 import { useForm } from "effector-forms";
 
@@ -24,9 +23,7 @@ export const ModalUser: React.FC<Props> = ({ action }) => {
   const handleSubmit = () => {
     const data = { name: fields.name.value, phone: fields.phone.value };
     handlerUserData({ data, action, contact });
-    action === ModalAction.Create
-      ? setShowModalCreate(false)
-      : setShowModalEdit(false);
+    setShowModal("");
   };
 
   return (
@@ -79,14 +76,7 @@ export const ModalUser: React.FC<Props> = ({ action }) => {
             >
               Submit
             </ButtonStyled>
-            <ButtonStyled
-              size="large"
-              onClick={() =>
-                action === ModalAction.Create
-                  ? setShowModalCreate(false)
-                  : setShowModalEdit(false)
-              }
-            >
+            <ButtonStyled size="large" onClick={() => setShowModal("")}>
               Cancel
             </ButtonStyled>
           </Buttons>

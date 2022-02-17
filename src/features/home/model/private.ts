@@ -1,7 +1,7 @@
 import { combine, createEffect, createEvent, createStore } from "effector";
 import {
   createEmptyUserData,
-  createEmptyUserDataArr,
+  createEmptyUserDataList,
 } from "src/lib/empty-userdata";
 import { ModalAction } from "src/types";
 
@@ -9,19 +9,17 @@ export const removeContact = createEvent<string>();
 export const changeContact = createEvent<UserData & { key: string }>();
 export const insertContact = createEvent<UserData>();
 export const changeSearch = createEvent<string>();
-export const setShowModalCreate = createEvent<boolean>();
-export const setShowModalEdit = createEvent<boolean>();
+export const setShowModal = createEvent<ModalAction | "">();
 export const setEditContactData = createEvent<UserData>();
 
 export const reset = createEvent();
 
-export const $openCreate = createStore(false);
-export const $openEdit = createStore(false);
+export const $open = createStore<ModalAction | "">("");
 export const $search = createStore("");
 
 export const $editContactData = createStore<UserData>(createEmptyUserData());
 
-export const $contacts = createStore<UserData[]>(createEmptyUserDataArr());
+export const $contacts = createStore<UserData[]>(createEmptyUserDataList());
 
 export const saveContact = createEffect((params: UserData[]) => {
   localStorage.setItem("userData", JSON.stringify(params));

@@ -1,4 +1,4 @@
-export function createEmptyUserDataArr(): UserData[] {
+export function createEmptyUserDataList(): UserData[] {
   return [
     {
       name: "",

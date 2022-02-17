@@ -3,21 +3,21 @@ import { Button } from "antd";
 import styled from "styled-components";
 import { useStore } from "effector-react";
 import { ModalAction } from "src/types";
-import { $openCreate, setShowModalCreate } from "../../model/private";
 import { Contacts, ModalUser, Search } from "../containers";
+import { $open, setShowModal } from "../../model/private";
 
 export const Home: React.FC = () => {
-  const open = useStore($openCreate);
+  const open = useStore($open);
 
   return (
     <Wrapper>
       <Search />
-      <ButtonWithMargin onClick={() => setShowModalCreate(!open)}>
+      <ButtonWithMargin onClick={() => setShowModal(ModalAction.Create)}>
         Create Modal
       </ButtonWithMargin>
       <Contacts />
 
-      {open && <ModalUser action={ModalAction.Create} />}
+      {open === ModalAction.Create && <ModalUser action={ModalAction.Create} />}
     </Wrapper>
   );
 };

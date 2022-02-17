@@ -14,7 +14,6 @@ export const $contacts = createStore<UserData[]>(createEmptyUserData());
 
 export const $open = createStore(false);
 export const $search = createStore("");
-export const $error = createStore("");
 
 export const saveContact = createEffect((params: UserData[]) => {
   localStorage.setItem("userData", JSON.stringify(params));

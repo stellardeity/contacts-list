@@ -1,8 +1,8 @@
 import React from "react";
-import { Home } from "./features/home/view";
+import { ContactsPage } from "./pages/ContactsPage";
 
 const App: React.FC = () => {
-  return <Home />;
+  return <ContactsPage />;
 };
 
 export default App;

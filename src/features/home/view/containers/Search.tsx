@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "antd";
 import { useStore } from "effector-react";
-import { $search, changeSearch } from "../../model/init";
+import { $search, changeSearch } from "../../model/private";
 
 export const Search: React.FC = () => {
   const value = useStore($search);

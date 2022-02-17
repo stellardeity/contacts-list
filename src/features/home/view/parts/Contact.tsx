@@ -1,8 +1,7 @@
 import React from "react";
 import { Button } from "antd";
 import styled from "styled-components";
-import { removeContact } from "src/features/home/model/public";
-import { setShowModal } from "src/features/home/model/private";
+import { removeContact, setShowModal } from "src/features/home/model/private";
 
 type Props = {
   border: boolean;

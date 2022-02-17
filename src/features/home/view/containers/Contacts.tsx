@@ -1,12 +1,12 @@
 import React from "react";
 import { ModalAction } from "src/types";
 import { ContactComponent } from "../parts/Contact";
-import { ModalUser } from "src/features/modal/view";
 import { useStore } from "effector-react";
-import { $filteredContacts } from "src/features/search/model/private";
-import { $contacts, $open } from "src/features/home/model";
+import { $contacts, $open } from "src/features/home/model/private";
+import { $filteredContacts } from "../../model/init";
+import { ModalUser } from "./Modal";
 
-export const UsersList: React.FC = () => {
+export const Contacts: React.FC = () => {
   const open = useStore($open);
   const search = useStore($filteredContacts);
   const contacts = useStore($contacts);

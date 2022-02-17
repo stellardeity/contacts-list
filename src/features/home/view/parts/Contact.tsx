@@ -9,12 +9,12 @@ type Props = {
   handleEditData: (val: UserData) => void;
 };
 
-export const ContactComponent: React.FC<Props> = ({
+export const Contact: React.FC<Props> = ({
   border,
   data: { phone, name },
   handleEditData,
 }) => (
-  <Contact border={border} key={name}>
+  <WrapperContact border={border} key={name}>
     <div>
       <h3>{name}</h3>
       <p>{phone}</p>
@@ -25,10 +25,10 @@ export const ContactComponent: React.FC<Props> = ({
         Delete
       </ButtonWithMargin>
     </div>
-  </Contact>
+  </WrapperContact>
 );
 
-const Contact = styled.div<{ border: boolean }>`
+const WrapperContact = styled.div<{ border: boolean }>`
   margin-top: 10;
   display: flex;
   justify-content: space-between;

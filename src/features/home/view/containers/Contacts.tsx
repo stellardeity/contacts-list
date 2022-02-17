@@ -1,6 +1,6 @@
 import React from "react";
 import { ModalAction } from "src/types";
-import { ContactComponent } from "../parts/Contact";
+import { Contact } from "../parts/Contact";
 import { useStore } from "effector-react";
 import {
   $contacts,
@@ -16,7 +16,7 @@ export const Contacts: React.FC = () => {
   const search = useStore($filteredContacts);
   const contacts = useStore($contacts);
 
-  const handleEditData = (data: UserData) => {
+  const changeEditData = (data: UserData) => {
     setShowModalEdit(true);
     setEditContactData(data);
   };
@@ -30,8 +30,8 @@ export const Contacts: React.FC = () => {
       )}
       {search.map((data, i) => (
         <div key={data.name + data.phone}>
-          <ContactComponent
-            handleEditData={handleEditData}
+          <Contact
+            handleEditData={changeEditData}
             border={search.length - 1 === i}
             data={data}
           />

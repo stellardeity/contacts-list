@@ -54,12 +54,8 @@ sample({
 
 export const UserDataForm = createForm({
   fields: {
-    name: {
-      init: "",
-    },
-    phone: {
-      init: "",
-    },
+    name: { init: "" },
+    phone: { init: "" },
   },
 });
 

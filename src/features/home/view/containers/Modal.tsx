@@ -5,7 +5,10 @@ import { useStore } from "effector-react";
 import { ModalAction } from "src/types";
 import { UserDataForm } from "../../model/init";
 import {
+  $contacts,
   $editContactData,
+  $error,
+  changeError,
   changeUserData,
   setShowModal,
 } from "src/features/home/model/private";
@@ -20,14 +23,28 @@ export const ModalUser: React.FC<Props> = ({ action }) => {
   const { fields } = useForm(UserDataForm);
   const pending = useStore(changeUserData.pending);
   const contact = useStore($editContactData);
+  const contacts = useStore($contacts);
+  const errorText = useStore($error);
 
   const handleSubmit = () => {
-    const data = {
-      name: fields.name.value,
-      phone: fields.phone.value,
-    };
-    changeUserData({ data, action, contact });
-    setShowModal(null);
+    const { phone, name } = fields;
+    const test = contacts.filter(
+      (e) => e.name === name.value || e.phone === phone.value
+    );
+    if (!test.length) {
+      const data = {
+        name: name.value,
+        phone: phone.value,
+      };
+      changeUserData({ data, action, contact });
+      setShowModal(null);
+    } else {
+      changeError("Такой пользователь уже существует!");
+
+      setTimeout(() => {
+        changeError("");
+      }, 2000);
+    }
   };
 
   return (
@@ -67,12 +84,7 @@ export const ModalUser: React.FC<Props> = ({ action }) => {
             }
           />
 
-          {fields.name.errorText({
-            name: "you must enter a valid name address",
-          })}
-          {fields.phone.errorText({
-            required: "phone required",
-          })}
+          <Error>{errorText}</Error>
 
           <Buttons>
             <ButtonStyled
@@ -108,6 +120,10 @@ const WrapperModal = styled.div`
 const WrapperTitle = styled.h1`
   margin-bottom: 30;
   font-size: 20px;
+`;
+
+const Error = styled.p`
+  color: red;
 `;
 
 const ModalInner = styled.div`

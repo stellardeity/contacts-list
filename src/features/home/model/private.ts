@@ -11,11 +11,14 @@ export const insertContact = createEvent<UserData>();
 export const changeSearch = createEvent<string>();
 export const setShowModal = createEvent<ModalAction | null>();
 export const setEditContactData = createEvent<UserData>();
+export const changeError = createEvent<string>("");
 
 export const reset = createEvent();
 
 export const $open = createStore<ModalAction | null>(null);
-export const $search = createStore("");
+export const $search = createStore<string>("");
+
+export const $error = createStore<string>("");
 
 export const $editContactData = createStore<UserData>(createEmptyUserData());
 
@@ -26,7 +29,7 @@ export const saveContact = createEffect((params: UserData[]) => {
 });
 export const getContactsList = createEffect(() => {
   try {
-    return JSON.parse(localStorage.getItem("userData") || "{}");
+    return JSON.parse(localStorage.getItem("userData") || "[]");
   } catch (e) {
     throw e;
   }

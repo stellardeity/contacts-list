@@ -7,6 +7,7 @@ import { getContactsList, saveContact } from "./private";
 
 store.$open.on(store.setShowModal, (_, value) => value);
 store.$search.on(store.changeSearch, (_, value) => value);
+store.$error.on(store.changeError, (_, value) => value);
 
 store.$editContactData.on(store.setEditContactData, (_, value) => value);
 

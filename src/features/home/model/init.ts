@@ -2,36 +2,24 @@ import { sample } from "effector";
 import { createForm } from "effector-forms";
 import { createEmptyUserDataList } from "src/lib/empty-userdata";
 import { UserDataFields } from "src/lib/form-userdata";
-import {
-  $contacts,
-  $editContactData,
-  $open,
-  $search,
-  changeContact,
-  changeSearch,
-  insertContact,
-  removeContact,
-  reset,
-  setEditContactData,
-  setShowModal,
-} from "./private";
+import * as store from "./private";
 import { getContactsList, saveContact } from "./private";
 
-$open.on(setShowModal, (_, value) => value);
-$search.on(changeSearch, (_, value) => value);
+store.$open.on(store.setShowModal, (_, value) => value);
+store.$search.on(store.changeSearch, (_, value) => value);
 
-$editContactData.on(setEditContactData, (_, value) => value);
+store.$editContactData.on(store.setEditContactData, (_, value) => value);
 
-$contacts
-  .on(insertContact, (contacts: UserData[], contact: UserData) => [
+store.$contacts
+  .on(store.insertContact, (contacts: UserData[], contact: UserData) => [
     ...contacts,
     contact,
   ])
-  .on(removeContact, (contacts: UserData[], name: string) =>
+  .on(store.removeContact, (contacts: UserData[], name: string) =>
     contacts.filter((e) => e.name !== name)
   )
   .on(
-    changeContact,
+    store.changeContact,
     (contacts: UserData[], { name, phone, key }: UserData & { key: string }) =>
       contacts.map((e: UserData) => {
         if (e.name === key) {
@@ -43,12 +31,12 @@ $contacts
   )
   .on(getContactsList.done, (_, { result }) => result)
   .on(getContactsList.fail, () => [])
-  .on(reset, () => createEmptyUserDataList());
+  .on(store.reset, () => createEmptyUserDataList());
 
 export const UserDataForm = createForm(UserDataFields);
 
 sample({
-  clock: $contacts,
+  clock: store.$contacts,
   target: saveContact,
 });
 getContactsList();

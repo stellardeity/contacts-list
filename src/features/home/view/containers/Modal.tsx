@@ -6,10 +6,11 @@ import { ModalAction } from "src/types";
 import { UserDataForm } from "../../model/init";
 import {
   $editContactData,
-  handlerUserData,
+  changeUserData,
   setShowModal,
 } from "src/features/home/model/private";
 import { useForm } from "effector-forms";
+import { formatPhoneNumberRU } from "src/lib/format-number";
 
 type Props = {
   action: ModalAction;
@@ -17,17 +18,20 @@ type Props = {
 
 export const ModalUser: React.FC<Props> = ({ action }) => {
   const { fields } = useForm(UserDataForm);
-  const pending = useStore(handlerUserData.pending);
+  const pending = useStore(changeUserData.pending);
   const contact = useStore($editContactData);
 
   const handleSubmit = () => {
-    const data = { name: fields.name.value, phone: fields.phone.value };
-    handlerUserData({ data, action, contact });
-    setShowModal("");
+    const data = {
+      name: fields.name.value,
+      phone: fields.phone.value,
+    };
+    changeUserData({ data, action, contact });
+    setShowModal(null);
   };
 
   return (
-    <Modal>
+    <WrapperModal>
       <ModalInner>
         <Form
           name="basic"
@@ -35,11 +39,11 @@ export const ModalUser: React.FC<Props> = ({ action }) => {
           onFinish={handleSubmit}
           autoComplete="off"
         >
-          <h1 style={{ marginBottom: 30, fontSize: 20 }}>
+          <WrapperTitle>
             {action === ModalAction.Create
               ? "Содать новый контакт"
               : `${contact?.name}`}
-          </h1>
+          </WrapperTitle>
 
           <InputStyled
             name="name"
@@ -56,8 +60,11 @@ export const ModalUser: React.FC<Props> = ({ action }) => {
             name="phone"
             value={fields.phone.value}
             placeholder="Номер телефона"
+            minLength={12}
             maxLength={12}
-            onChange={({ target }) => fields.phone.onChange(target.value)}
+            onChange={({ target }) =>
+              fields.phone.onChange(formatPhoneNumberRU(target.value))
+            }
           />
 
           {fields.name.errorText({
@@ -76,17 +83,17 @@ export const ModalUser: React.FC<Props> = ({ action }) => {
             >
               Submit
             </ButtonStyled>
-            <ButtonStyled size="large" onClick={() => setShowModal("")}>
+            <ButtonStyled size="large" onClick={() => setShowModal(null)}>
               Cancel
             </ButtonStyled>
           </Buttons>
         </Form>
       </ModalInner>
-    </Modal>
+    </WrapperModal>
   );
 };
 
-const Modal = styled.div`
+const WrapperModal = styled.div`
   background-color: #2a9fff;
   position: absolute;
   top: 0;
@@ -96,6 +103,11 @@ const Modal = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const WrapperTitle = styled.h1`
+  margin-bottom: 30;
+  font-size: 20px;
 `;
 
 const ModalInner = styled.div`

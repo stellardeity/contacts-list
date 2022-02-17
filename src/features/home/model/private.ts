@@ -9,12 +9,12 @@ export const removeContact = createEvent<string>();
 export const changeContact = createEvent<UserData & { key: string }>();
 export const insertContact = createEvent<UserData>();
 export const changeSearch = createEvent<string>();
-export const setShowModal = createEvent<ModalAction | "">();
+export const setShowModal = createEvent<ModalAction | null>();
 export const setEditContactData = createEvent<UserData>();
 
 export const reset = createEvent();
 
-export const $open = createStore<ModalAction | "">("");
+export const $open = createStore<ModalAction | null>(null);
 export const $search = createStore("");
 
 export const $editContactData = createStore<UserData>(createEmptyUserData());
@@ -43,7 +43,7 @@ export const $filteredContacts = combine(
   }
 );
 
-export const handlerUserData = createEffect(
+export const changeUserData = createEffect(
   ({
     data,
     action,

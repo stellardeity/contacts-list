@@ -2,12 +2,9 @@ import React from "react";
 import { Button } from "antd";
 import styled from "styled-components";
 import { useStore } from "effector-react";
-import { UsersList } from "src/features/contacts/view/entries";
-import { ModalUser } from "src/features/modal/view";
 import { ModalAction } from "src/types";
-import { setShowModal } from "../../model/private";
-import { Search } from "src/features/search/view";
-import { $open } from "../../model";
+import { $open, setShowModal } from "../../model/private";
+import { Contacts, ModalUser, Search } from "../containers";
 
 export const Home: React.FC = () => {
   const open = useStore($open);
@@ -18,7 +15,7 @@ export const Home: React.FC = () => {
       <ButtonWithMargin onClick={() => setShowModal(!open)}>
         Create Modal
       </ButtonWithMargin>
-      <UsersList />
+      <Contacts />
 
       {open && <ModalUser action={ModalAction.Create} />}
     </Wrapper>

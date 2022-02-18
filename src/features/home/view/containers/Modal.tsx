@@ -3,48 +3,20 @@ import { Form, Input, Button } from "antd";
 import styled from "styled-components";
 import { useStore } from "effector-react";
 import { ModalAction } from "src/types";
-import { UserDataForm } from "../../model/init";
 import {
-  $contacts,
-  $editContactData,
-  $error,
-  changeError,
-  changeUserData,
-  setShowModal,
+  $modalType,
+  closeModal,
+  userDataForm,
 } from "src/features/home/model/private";
 import { useForm } from "effector-forms";
 import { formatPhoneNumberRU } from "src/lib/format-number";
 
-type Props = {
-  action: ModalAction;
-};
-
-export const ModalUser: React.FC<Props> = ({ action }) => {
-  const { fields } = useForm(UserDataForm);
-  const pending = useStore(changeUserData.pending);
-  const contact = useStore($editContactData);
-  const contacts = useStore($contacts);
-  const errorText = useStore($error);
+export const ModalUser: React.FC = () => {
+  const { fields, submit } = useForm(userDataForm);
+  const action = useStore($modalType);
 
   const handleSubmit = () => {
-    const { phone, name } = fields;
-    const test = contacts.filter(
-      (e) => e.name === name.value || e.phone === phone.value
-    );
-    if (!test.length) {
-      const data = {
-        name: name.value,
-        phone: phone.value,
-      };
-      changeUserData({ data, action, contact });
-      setShowModal(null);
-    } else {
-      changeError("Такой пользователь уже существует!");
-
-      setTimeout(() => {
-        changeError("");
-      }, 2000);
-    }
+    submit();
   };
 
   return (
@@ -59,21 +31,20 @@ export const ModalUser: React.FC<Props> = ({ action }) => {
           <WrapperTitle>
             {action === ModalAction.Create
               ? "Содать новый контакт"
-              : `${contact?.name}`}
+              : `${fields.name.value}`}
           </WrapperTitle>
 
           <InputStyled
             name="name"
-            disabled={pending}
-            required
             value={fields.name.value}
             style={{ marginBottom: 10 }}
             placeholder="ФИО"
             onChange={({ target }) => fields.name.onChange(target.value)}
           />
+
+          {fields.name.firstError?.errorText}
+
           <InputStyled
-            required
-            disabled={pending}
             name="phone"
             value={fields.phone.value}
             placeholder="Номер телефона"
@@ -84,18 +55,13 @@ export const ModalUser: React.FC<Props> = ({ action }) => {
             }
           />
 
-          <Error>{errorText}</Error>
+          {fields.phone.firstError?.errorText}
 
           <Buttons>
-            <ButtonStyled
-              size="large"
-              type="primary"
-              disabled={pending}
-              htmlType="submit"
-            >
+            <ButtonStyled size="large" type="primary" htmlType="submit">
               Submit
             </ButtonStyled>
-            <ButtonStyled size="large" onClick={() => setShowModal(null)}>
+            <ButtonStyled size="large" onClick={() => closeModal()}>
               Cancel
             </ButtonStyled>
           </Buttons>

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useStore } from "effector-react";
 import { ModalAction } from "src/types";
 import { Contacts, ModalUser, Search } from "../containers";
-import { $open, setShowModal } from "../../model/private";
+import { $open, openModal } from "../../model/private";
 
 export const Home: React.FC = () => {
   const open = useStore($open);
@@ -12,12 +12,16 @@ export const Home: React.FC = () => {
   return (
     <Wrapper>
       <Search />
-      <ButtonWithMargin onClick={() => setShowModal(ModalAction.Create)}>
+      <ButtonWithMargin
+        onClick={() => {
+          openModal({ type: ModalAction.Create });
+        }}
+      >
         Create Modal
       </ButtonWithMargin>
       <Contacts />
 
-      {open === ModalAction.Create && <ModalUser action={ModalAction.Create} />}
+      {open && <ModalUser />}
     </Wrapper>
   );
 };

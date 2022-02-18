@@ -5,20 +5,15 @@ import { useStore } from "effector-react";
 import {
   $contacts,
   $filteredContacts,
-  $open,
-  setEditContactData,
-  setShowModal,
+  openModal,
 } from "src/features/home/model/private";
-import { ModalUser } from "./Modal";
 
 export const Contacts: React.FC = () => {
-  const open = useStore($open);
   const search = useStore($filteredContacts);
   const contacts = useStore($contacts);
 
   const changeEditData = (data: UserData) => {
-    setShowModal(ModalAction.Edit);
-    setEditContactData(data);
+    openModal({ type: ModalAction.Edit, name: data.name });
   };
 
   return (
@@ -35,7 +30,6 @@ export const Contacts: React.FC = () => {
             border={search.length - 1 === i}
             data={data}
           />
-          {open === ModalAction.Edit && <ModalUser action={ModalAction.Edit} />}
         </div>
       ))}
     </div>

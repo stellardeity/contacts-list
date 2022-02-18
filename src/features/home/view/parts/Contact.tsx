@@ -21,7 +21,7 @@ export const Contact: React.FC<Props> = ({
     </div>
     <div>
       <Button onClick={() => handleEditData({ phone, name })}>Edit</Button>
-      <ButtonWithMargin danger style={{}} onClick={() => removeContact(name)}>
+      <ButtonWithMargin danger onClick={() => removeContact(name)}>
         Delete
       </ButtonWithMargin>
     </div>

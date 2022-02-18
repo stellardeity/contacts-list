@@ -12,10 +12,6 @@ export const Contacts: React.FC = () => {
   const search = useStore($filteredContacts);
   const contacts = useStore($contacts);
 
-  const changeEditData = (data: UserData) => {
-    openModal({ type: ModalAction.Edit, name: data.name });
-  };
-
   return (
     <div>
       {search.length ? (
@@ -26,7 +22,9 @@ export const Contacts: React.FC = () => {
       {search.map((data, i) => (
         <div key={data.name + data.phone}>
           <Contact
-            handleEditData={changeEditData}
+            handleEditData={(data) =>
+              openModal({ type: ModalAction.Edit, name: data.name })
+            }
             border={search.length - 1 === i}
             data={data}
           />

@@ -1,7 +1,6 @@
 import { combine, createEffect, createEvent, createStore, sample, split } from "effector";
 import { createForm } from "effector-forms";
 import {
-  createEmptyUserData,
   createEmptyUserDataList,
 } from "src/lib/empty-userdata";
 import { required } from "src/lib/validation-rules";

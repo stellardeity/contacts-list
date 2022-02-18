@@ -14,18 +14,13 @@ import { formatPhoneNumberRU } from "src/lib/format-number";
 export const ModalUser: React.FC = () => {
   const { fields, submit } = useForm(userDataForm);
   const action = useStore($modalType);
-
-  const handleSubmit = () => {
-    submit();
-  };
-
   return (
     <WrapperModal>
       <ModalInner>
         <Form
           name="basic"
           initialValues={{ remember: true }}
-          onFinish={handleSubmit}
+          onFinish={() => submit()}
           autoComplete="off"
         >
           <WrapperTitle>

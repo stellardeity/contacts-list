@@ -11,7 +11,7 @@ import {
 import { useForm } from "effector-forms";
 import { formatPhoneNumberRU } from "src/lib/format-number";
 
-export const ModalUser: React.FC = () => {
+export const ModalWindow: React.FC = () => {
   const { fields, submit } = useForm(userDataForm);
   const action = useStore($modalType);
   return (

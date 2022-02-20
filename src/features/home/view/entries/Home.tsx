@@ -12,11 +12,7 @@ export const Home: React.FC = () => {
   return (
     <Wrapper>
       <Search />
-      <ButtonWithMargin
-        onClick={() => {
-          openModal({ type: ModalAction.Create });
-        }}
-      >
+      <ButtonWithMargin onClick={() => openModal({ type: ModalAction.Create })}>
         Create Modal
       </ButtonWithMargin>
       <Contacts />
@@ -31,7 +27,6 @@ const ButtonWithMargin = styled(Button)`
 `;
 
 const Wrapper = styled.div`
-  min-width: 800px;
   margin: 20px auto;
   padding: 10px 170px;
 

@@ -1,3 +1,3 @@
 export { Search } from "./Search";
-export { ModalUser } from "./Modal";
+export { ModalWindow as ModalUser } from "./Modal";
 export { Contacts } from "./Contacts";

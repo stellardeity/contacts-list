@@ -78,8 +78,6 @@ sample({
 })
 
 // ===========
-store.getContactsListFx();
-
 store.getContactsListFx.use(() => {
   return JSON.parse(localStorage.getItem("userData") || "{}");
 })
@@ -87,3 +85,5 @@ store.getContactsListFx.use(() => {
 store.saveContactFx.use((params: UserData[]) => {
   localStorage.setItem("userData", JSON.stringify(params));
 })
+
+store.getContactsListFx();

@@ -77,6 +77,10 @@ sample({
 
 // ===========
 store.getContactsListFx.use(() => {
+  const contacts = JSON.parse(localStorage.getItem("userData") || "[]");
+  if (Object.entries(contacts).length === 0) {
+    localStorage.setItem("userData", JSON.stringify([]));
+  }
   return JSON.parse(localStorage.getItem("userData") || "[]");
 });
 

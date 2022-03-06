@@ -4,14 +4,12 @@ import * as store from "./private";
 
 store.$search.on(store.changeSearch, (_, value) => value);
 
-store.$open
-  .on(store.openModal, () => true)
-  .reset(store.closeModal);
+store.$open.on(store.openModal, () => true).reset(store.closeModal);
 store.$modalType
   .on(store.openModal, (_, value) => value.type)
   .reset(store.closeModal);
 
-store.$oldName.on(store.openModal, (_, value) => value.name)
+store.$oldName.on(store.openModal, (_, value) => value.name);
 
 store.$contacts
   .on(store.insertContact, (contacts: UserData[], contact: UserData) => [
@@ -56,34 +54,34 @@ sample({
 // changing fields
 forward({
   from: store.modalTypeSplit.create.map((e) => e.form),
-  to: store.insertContact
-})
+  to: store.insertContact,
+});
 
 sample({
   source: store.$oldName,
   clock: store.modalTypeSplit.edit,
   fn: (s, c) => ({ name: c.form.name, phone: c.form.phone, key: s }),
-  target: store.changeContact
-})
+  target: store.changeContact,
+});
 
 // close modal
 forward({
   from: store.closeModal,
-  to: store.userDataForm.reset
-})
+  to: store.userDataForm.reset,
+});
 
 sample({
   clock: store.userDataForm.formValidated,
-  target: store.closeModal
-})
+  target: store.closeModal,
+});
 
 // ===========
 store.getContactsListFx.use(() => {
-  return JSON.parse(localStorage.getItem("userData") || "{}");
-})
+  return JSON.parse(localStorage.getItem("userData") || "[]");
+});
 
 store.saveContactFx.use((params: UserData[]) => {
   localStorage.setItem("userData", JSON.stringify(params));
-})
+});
 
 store.getContactsListFx();

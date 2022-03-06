@@ -34,6 +34,7 @@ export const ModalWindow: React.FC = () => {
             value={fields.name.value}
             style={{ marginBottom: 10 }}
             placeholder="ФИО"
+            maxLength={20}
             onChange={({ target }) => fields.name.onChange(target.value)}
           />
 
@@ -81,10 +82,6 @@ const WrapperModal = styled.div`
 const WrapperTitle = styled.h1`
   margin-bottom: 30;
   font-size: 20px;
-`;
-
-const Error = styled.p`
-  color: red;
 `;
 
 const ModalInner = styled.div`
